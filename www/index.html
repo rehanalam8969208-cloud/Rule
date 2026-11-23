@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Life OS — Routine, Rules & Ledger</title>
+<style>
+  :root {
+    --bg-1: #0b0f19;
+    --bg-2: #121829;
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-strong: rgba(255, 255, 255, 0.11);
+    --border: rgba(255, 255, 255, 0.12);
+    --text: #f5f7fa;
+    --muted: #9aa4b8;
+    --accent: #38bdf8;
+    --accent-2: #818cf8;
+    --success: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --radius: 20px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(circle at 15% 10%, #1e293b 0%, var(--bg-1) 45%, #060911 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 16px 14px 96px;
+    line-height: 1.45;
+  }
+
+  .app {
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .title-wrap h1 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .title-wrap p {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .clock-pill {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* Level Banner */
+  .level-card {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(129, 140, 248, 0.14));
+    border: 1px solid rgba(129, 140, 248, 0.3);
+    border-radius: var(--radius);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .level-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lvl-pill {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #07111f;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .rank-name {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .streak-pill {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--warn);
+    background: rgba(251, 191, 36, 0.14);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .xp-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* Segmented Control (3 Tabs) */
+  .segmented {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    padding: 5px;
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    margin-bottom: 16px;
+  }
+
+  .seg-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 6px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .seg-btn.active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(129, 140, 248, 0.25));
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  /* Views */
+  .view {
+    display: none;
+    animation: fadeIn 0.25s ease;
+  }
+  .view.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Glass Card */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .progress-label {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .progress-pct {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--success);
+  }
+
+  .bar-bg {
+    width: 100%;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--success));
+    border-radius: 999px;
+    transition: width 0.35s ease;
+  }
+
+  .bar-fill.xp-fill {
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  }
+
+  .controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .chip-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .chip-btn.active-mode {
+    background: rgba(251, 191, 36, 0.18);
+    border-color: rgba(251, 191, 36, 0.5);
+    color: var(--warn);
+  }
+
+  .chip-btn.accent-chip {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.45);
+    color: var(--accent);
+  }
+
+  .chip-btn:active {
+    transform: scale(0.96);
+  }
+
+  /* Forms */
+  .form-box {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .form-box.open {
+    display: block;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .field {
+    margin-bottom: 10px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .input, select {
+    width: 100%;
+    background: rgba(11, 15, 25, 0.75);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    outline: none;
+  }
+
+  .input:focus, select:focus {
+    border-color: var(--accent);
+  }
+
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* Routine Items */
+  .routine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+
+  .task-item.done {
+    opacity: 0.56;
+    border-color: rgba(52, 211, 153, 0.3);
+  }
+
+  .task-item.done .task-title {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .task-item.current-slot {
+    border-color: rgba(56, 189, 248, 0.6);
+    background: rgba(56, 189, 248, 0.09);
+  }
+
+  .task-item.hidden-workday {
+    display: none;
+  }
+
+  .check-circle {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    font-size: 13px;
+    color: transparent;
+  }
+
+  .task-item.done .check-circle {
+    background: var(--success);
+    border-color: var(--success);
+    color: #06281c;
+    font-weight: 800;
+  }
+
+  .task-body {
+    flex: 1;
+  }
+
+  .task-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+
+  .time-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.14);
+    padding: 3px 8px;
+    border-radius: 8px;
+  }
+
+  .tag-badge {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.07);
+    padding: 3px 7px;
+    border-radius: 8px;
+  }
+
+  .now-badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0b0f19;
+    background: var(--accent);
+    padding: 2px 7px;
+    border-radius: 8px;
+  }
+
+  .task-title {
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+
+  .task-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .del-icon {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    color: var(--danger);
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* Quiz Interface */
+  .quiz-header-card {
+    text-align: center;
+  }
+
+  .quiz-header-card h2 {
+    font-size: 17px;
+    margin-bottom: 4px;
+  }
+
+  .quiz-header-card p {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .quiz-mode-switch {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .dots-bar {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .dot {
+    width: 20px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .dot.active { background: var(--accent); }
+  .dot.answered { background: var(--success); }
+
+  .q-category {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--accent-2);
+    background: rgba(129, 140, 248, 0.16);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+
+  .q-text {
+    font-size: 16.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .q-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .options-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .opt-btn {
+    text-align: left;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 13px 14px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .opt-btn.correct { background: rgba(52, 211, 153, 0.16); border-color: var(--success); color: #d1fae5; }
+  .opt-btn.mid { background: rgba(251, 191, 36, 0.15); border-color: var(--warn); color: #fef3c7; }
+  .opt-btn.wrong { background: rgba(248, 113, 113, 0.16); border-color: var(--danger); color: #fee2e2; }
+
+  .feedback-box {
+    margin-top: 12px;
+    padding: 11px 13px;
+    border-radius: 13px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    font-size: 12.5px;
+    color: #e0f2fe;
+    display: none;
+  }
+
+  .primary-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #07111f;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .score-ring {
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    margin: 8px auto 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(56, 189, 248, 0.1);
+    border: 4px solid var(--success);
+  }
+  .score-ring .big { font-size: 26px; font-weight: 800; }
+  .score-ring .small { font-size: 11px; color: var(--muted); }
+
+  .rule-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .rule-row:last-child { border-bottom: none; }
+
+  .pause-tool {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .pause-btn {
+    background: rgba(129, 140, 248, 0.22);
+    border: 1px solid rgba(129, 140, 248, 0.5);
+    color: #fff;
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    min-width: 110px;
+  }
+
+  /* Finance Ledger */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .stat-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .stat-val {
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .c-green { color: var(--success); }
+  .c-red { color: var(--danger); }
+  .c-amber { color: var(--warn); }
+
+  .filter-scroll {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+  }
+
+  .ledger-item {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 13px 14px;
+    margin-bottom: 10px;
+  }
+
+  .ledger-item.settled {
+    opacity: 0.55;
+  }
+
+  .ledger-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .ledger-name {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .ledger-amt {
+    font-size: 16px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .ledger-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .ledger-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 26px 14px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="title-wrap">
+      <h1>Life OS</h1>
+      <p id="dateText">Personal Discipline & Ledger</p>
+    </div>
+    <div class="clock-pill" id="liveClock">--:--</div>
+  </div>
+
+  <!-- Persistent Life Level Banner -->
+  <div class="level-card">
+    <div class="level-top">
+      <div class="rank-badge">
+        <span class="lvl-pill" id="lvlBadge">LVL 1</span>
+        <span class="rank-name" id="rankName">Novice</span>
+      </div>
+      <span class="streak-pill" id="streakBadge">0 Day Streak</span>
+    </div>
+    <div class="bar-bg">
+      <div class="bar-fill xp-fill" id="xpFill"></div>
+    </div>
+    <div class="xp-meta">
+      <span id="xpProgressText">0 / 500 XP</span>
+      <span id="totalXpText">Total: 0 XP</span>
+    </div>
+  </div>
+
+  <!-- Main 3-Tab Switcher -->
+  <div class="segmented">
+    <button class="seg-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
+    <button class="seg-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
+    <button class="seg-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
+  </div>
+
+  <!-- ==================== VIEW 1: ROUTINE ==================== -->
+  <section id="viewRoutine" class="view active">
+    <div class="card">
+      <div class="progress-top">
+        <span class="progress-label" id="progressText">0 / 0 Habits Complete</span>
+        <span class="progress-pct" id="progressPct">0%</span>
+      </div>
+      <div class="bar-bg">
+        <div class="bar-fill" id="progressFill"></div>
+      </div>
+      <div class="controls-row">
+        <button class="chip-btn" id="workdayBtn" onclick="toggleWorkdayMode()">Workday Mode: OFF</button>
+        <button class="chip-btn accent-chip" onclick="toggleForm('habitForm')">+ Add Habit</button>
+      </div>
+
+      <!-- Add Habit Form -->
+      <div class="form-box" id="habitForm">
+        <div class="form-grid">
+          <div class="field">
+            <label>Start Time (24h)</label>
+            <input type="time" id="hStart" class="input" value="07:00">
+          </div>
+          <div class="field">
+            <label>End Time (24h)</label>
+            <input type="time" id="hEnd" class="input" value="08:00">
+          </div>
+        </div>
+        <div class="field">
+          <label>Habit Title</label>
+          <input type="text" id="hTitle" class="input" placeholder="e.g., Reading Technical Books">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="hDesc" class="input" placeholder="Short action note">
+        </div>
+        <div class="field">
+          <label>Category Tag</label>
+          <input type="text" id="hTag" class="input" placeholder="e.g., Fitness, Study, Skill">
+        </div>
+        <label class="check-row">
+          <input type="checkbox" id="hEssential" checked>
+          Keep active during Workday Mode
+        </label>
+        <button class="primary-btn" onclick="addHabit()">Save Habit</button>
+      </div>
+    </div>
+
+    <div class="routine-list" id="routineList"></div>
+  </section>
+
+  <!-- ==================== VIEW 2: RULES & QUIZ ==================== -->
+  <section id="viewQuiz" class="view">
+    <div class="card quiz-header-card">
+      <h2>Principles & Daily Check-in</h2>
+      <p>Evaluate your discipline daily (+30 XP max per day).</p>
+      <div class="quiz-mode-switch">
+        <button class="chip-btn active-mode" id="modeCheckin" onclick="setQuizMode('checkin')">Daily Check-in</button>
+        <button class="chip-btn" id="modeList" onclick="setQuizMode('list')">All Rules</button>
+      </div>
+    </div>
+
+    <!-- 3-Second Pause Tool -->
+    <div class="card pause-tool">
+      <div>
+        <div style="font-size:14px; font-weight:700;">3-Second Pause Practice</div>
+        <div style="font-size:12px; color:var(--muted);" id="pauseStatus">Pause 3 seconds before responding</div>
+      </div>
+      <button class="pause-btn" id="pauseBtn" onclick="startPauseTimer()">Start 3s</button>
+    </div>
+
+    <div class="card" id="quizCard"></div>
+  </section>
+
+  <!-- ==================== VIEW 3: FINANCE LEDGER ==================== -->
+  <section id="viewLedger" class="view">
+    <div class="summary-grid">
+      <div class="stat-card">
+        <div class="stat-label">To Receive</div>
+        <div class="stat-val c-green" id="sumReceive">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">To Pay / Loans</div>
+        <div class="stat-val c-red" id="sumPay">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Expenses</div>
+        <div class="stat-val c-amber" id="sumExpense">₹0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="progress-top" style="margin-bottom:0;">
+        <span class="progress-label">Financial Records</span>
+        <button class="chip-btn accent-chip" onclick="toggleForm('ledgerForm')">+ Add Record</button>
+      </div>
+
+      <!-- Add Finance Entry Form -->
+      <div class="form-box" id="ledgerForm">
+        <div class="field">
+          <label>Record Type</label>
+          <select id="lType">
+            <option value="given">Money Given (Lent)</option>
+            <option value="taken">Money Taken (Borrowed)</option>
+            <option value="loan">Loan / EMI</option>
+            <option value="expense">Personal Expense</option>
+            <option value="income">Income / Received</option>
+          </select>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Person / Title</label>
+            <input type="text" id="lPerson" class="input" placeholder="Name or item">
+          </div>
+          <div class="field">
+            <label>Amount (₹)</label>
+            <input type="number" id="lAmount" class="input" placeholder="0">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Payment Mode</label>
+            <select id="lMode">
+              <option value="UPI">UPI</option>
+              <option value="Cash">Cash</option>
+              <option value="Bank">Bank Transfer</option>
