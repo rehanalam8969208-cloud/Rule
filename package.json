@@ -1,0 +1,10 @@
+{
+  "name": "life-os",
+  "version": "1.0.0",
+  "description": "Personal Routine, Discipline & Finance Manager",
+  "dependencies": {
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/cli": "^6.1.0",
+    "@capacitor/core": "^6.1.0"
+  }
+}
