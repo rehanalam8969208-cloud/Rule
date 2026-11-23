@@ -29,8 +29,8 @@
     --warn: #fbbf24;
     --danger: #f87171;
 
-    --ease-spring: cubic-bezier(0.2, 0.9, 0.25, 1.08);
-    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-float: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-silk: cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   * {
@@ -52,11 +52,11 @@
   button {
     font-family: inherit;
     touch-action: manipulation;
-    transition: transform 0.22s var(--ease-spring), background 0.22s var(--ease-smooth), color 0.22s var(--ease-smooth), border-color 0.22s var(--ease-smooth), opacity 0.22s var(--ease-smooth);
+    transition: transform 0.32s var(--ease-float), background 0.28s var(--ease-silk), color 0.28s var(--ease-silk), border-color 0.28s var(--ease-silk), opacity 0.28s var(--ease-silk);
   }
 
   button:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
 
   html, body {
@@ -107,9 +107,9 @@
     position: fixed;
     bottom: 88px;
     left: 50%;
-    transform: translateX(-50%) translateY(24px) scale(0.94);
+    transform: translateX(-50%) translateY(18px) scale(0.95);
     background: rgba(14, 17, 24, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: var(--text-primary);
     padding: 10px 18px;
     border-radius: 999px;
@@ -118,9 +118,9 @@
     z-index: 9999;
     opacity: 0;
     pointer-events: none;
-    backdrop-filter: blur(20px);
-    transition: transform 0.34s var(--ease-spring), opacity 0.24s var(--ease-smooth);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(22px);
+    transition: transform 0.45s var(--ease-float), opacity 0.32s var(--ease-silk);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
     white-space: nowrap;
   }
   .toast.show {
@@ -214,7 +214,7 @@
     margin-top: 6px;
   }
 
-  /* BOTTOM NAVIGATION WITH CENTER CREATE BUTTON */
+  /* BOTTOM DOCK: CREATE ON LEFT + 3 EQUAL TABS ON RIGHT, UNIFORM STYLE */
   .bottom-nav-wrap {
     position: fixed;
     left: 0;
@@ -230,13 +230,13 @@
     max-width: 540px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr auto 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     align-items: center;
     gap: 4px;
     background: rgba(16, 19, 27, 0.86);
     border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
-    padding: 5px 6px;
-    border-radius: 22px;
+    padding: 5px;
+    border-radius: 20px;
     backdrop-filter: blur(28px);
     pointer-events: auto;
     box-shadow: 0 12px 34px rgba(0, 0, 0, 0.65);
@@ -246,12 +246,13 @@
     border: none;
     background: transparent;
     color: var(--text-secondary);
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 10px 4px;
-    border-radius: 16px;
+    padding: 11px 4px;
+    border-radius: 15px;
     cursor: pointer;
     white-space: nowrap;
+    text-align: center;
   }
 
   .dock-btn.active {
@@ -259,44 +260,25 @@
     color: var(--btn-active-text);
   }
 
-  .create-center-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
-    color: var(--text-primary);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 10px 14px;
-    border-radius: 16px;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  }
-
-  .create-center-btn .plus-mark {
-    font-size: 15px;
-    line-height: 1;
-    font-weight: 800;
-  }
-
-  /* ANDROID 17 STYLE VIEW TRANSITIONS */
+  /* ANDROID 17 SILKY FLOATING VIEW TRANSITIONS */
   .view {
     display: none;
   }
   .view.active {
     display: block;
-    animation: a17ViewIn 0.36s var(--ease-spring) both;
+    animation: a17FloatView 0.52s var(--ease-float) both;
   }
 
-  @keyframes a17ViewIn {
+  @keyframes a17FloatView {
     0% {
       opacity: 0;
-      transform: translateY(16px) scale(0.985);
+      transform: translateY(14px) scale(0.985);
+      filter: blur(4px);
     }
     100% {
       opacity: 1;
       transform: translateY(0) scale(1);
+      filter: blur(0px);
     }
   }
 
@@ -307,7 +289,7 @@
     padding: 16px;
     margin-bottom: 14px;
     backdrop-filter: blur(var(--glass-blur));
-    transition: transform 0.28s var(--ease-spring), border-color 0.25s var(--ease-smooth);
+    transition: transform 0.38s var(--ease-float), border-color 0.28s var(--ease-silk);
   }
 
   .progress-top {
@@ -341,7 +323,7 @@
     width: 0%;
     background: linear-gradient(90deg, var(--accent), var(--success));
     border-radius: 999px;
-    transition: width 0.35s var(--ease-spring);
+    transition: width 0.5s var(--ease-float);
   }
 
   .bar-fill.xp-fill {
@@ -401,7 +383,7 @@
     border-radius: 14px;
     font-size: 14px;
     outline: none;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition: border-color 0.25s var(--ease-silk), background 0.25s var(--ease-silk);
   }
 
   .input:focus, select:focus {
@@ -440,16 +422,16 @@
     cursor: pointer;
     touch-action: manipulation;
     backdrop-filter: blur(var(--glass-blur));
-    transition: transform 0.24s var(--ease-spring), border-color 0.25s var(--ease-smooth), opacity 0.25s var(--ease-smooth);
+    transition: transform 0.36s var(--ease-float), border-color 0.28s var(--ease-silk), opacity 0.28s var(--ease-silk);
   }
 
   .task-item:active {
-    transform: scale(0.975);
+    transform: scale(0.98);
   }
 
   .task-item.pressing {
-    transform: scale(0.96);
-    border-color: rgba(255, 255, 255, 0.55);
+    transform: scale(0.965);
+    border-color: rgba(255, 255, 255, 0.5);
   }
 
   .task-item.done {
@@ -482,7 +464,7 @@
     margin-top: 2px;
     font-size: 13px;
     color: transparent;
-    transition: all 0.25s var(--ease-spring);
+    transition: all 0.34s var(--ease-float);
   }
 
   .task-item.done .check-circle {
@@ -490,7 +472,6 @@
     border-color: var(--success);
     color: #06281c;
     font-weight: 800;
-    transform: scale(1.05);
   }
 
   .task-body {
@@ -585,7 +566,7 @@
     height: 5px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.14);
-    transition: all 0.25s var(--ease-spring);
+    transition: all 0.36s var(--ease-float);
   }
   .dot.active { background: var(--btn-active-bg); width: 26px; }
   .dot.answered { background: var(--success); }
@@ -646,7 +627,7 @@
     font-size: 12.5px;
     color: var(--text-primary);
     display: none;
-    animation: a17PopIn 0.28s var(--ease-spring) both;
+    animation: a17FloatView 0.4s var(--ease-float) both;
   }
 
   .primary-btn {
@@ -712,10 +693,10 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.22s var(--ease-spring), background 0.2s ease;
+    transition: transform 0.34s var(--ease-float), background 0.25s var(--ease-silk);
   }
   .rule-row:active {
-    transform: scale(0.98);
+    transform: scale(0.985);
     background: rgba(255, 255, 255, 0.05);
   }
   .rule-row:last-child { border-bottom: none; }
@@ -785,11 +766,11 @@
     padding: 13px 14px;
     margin-bottom: 10px;
     backdrop-filter: blur(var(--glass-blur));
-    transition: transform 0.24s var(--ease-spring), border-color 0.25s var(--ease-smooth), opacity 0.25s var(--ease-smooth);
+    transition: transform 0.36s var(--ease-float), border-color 0.28s var(--ease-silk), opacity 0.28s var(--ease-silk);
   }
 
   .ledger-item:active {
-    transform: scale(0.98);
+    transform: scale(0.985);
   }
 
   .ledger-item.settled {
@@ -836,26 +817,33 @@
     font-size: 13px;
   }
 
-  /* ANDROID 17 CLASSY GLASS POPUP & ACTION SHEETS */
+  /* ANDROID 17 WEIGHTLESS FLOATING POPUP SHEETS */
   .a17-backdrop {
     position: fixed;
     inset: 0;
     z-index: 3000;
-    background: rgba(3, 4, 7, 0.56);
+    background: rgba(3, 4, 7, 0);
     backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
     opacity: 0;
     pointer-events: none;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     padding: 12px;
-    transition: opacity 0.28s var(--ease-smooth), backdrop-filter 0.32s var(--ease-smooth);
+    transition:
+      opacity 0.42s var(--ease-float),
+      background 0.45s var(--ease-float),
+      backdrop-filter 0.45s var(--ease-float),
+      -webkit-backdrop-filter 0.45s var(--ease-float);
   }
 
   .a17-backdrop.open {
     opacity: 1;
     pointer-events: auto;
-    backdrop-filter: blur(18px);
+    background: rgba(3, 4, 7, 0.52);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 
   .a17-sheet {
@@ -863,15 +851,19 @@
     max-width: 516px;
     max-height: 86vh;
     overflow-y: auto;
-    background: rgba(16, 19, 28, 0.86);
+    background: rgba(16, 19, 28, 0.84);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 28px;
+    border-radius: 30px;
     padding: 16px 18px 20px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(32px);
-    transform: translateY(48px) scale(0.95);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(34px);
+    -webkit-backdrop-filter: blur(34px);
+    transform: translateY(36px) scale(0.94);
     opacity: 0;
-    transition: transform 0.42s var(--ease-spring), opacity 0.25s var(--ease-smooth);
+    will-change: transform, opacity;
+    transition:
+      transform 0.56s var(--ease-float),
+      opacity 0.36s var(--ease-silk);
   }
 
   .a17-backdrop.open .a17-sheet {
@@ -934,7 +926,22 @@
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
     cursor: pointer;
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    transition:
+      transform 0.48s var(--ease-float),
+      opacity 0.38s var(--ease-silk),
+      background 0.25s var(--ease-silk),
+      border-color 0.25s var(--ease-silk);
   }
+
+  .a17-backdrop.open .create-choice-card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .a17-backdrop.open .create-choice-card:nth-child(1) { transition-delay: 0.04s; }
+  .a17-backdrop.open .create-choice-card:nth-child(2) { transition-delay: 0.08s; }
+  .a17-backdrop.open .create-choice-card:nth-child(3) { transition-delay: 0.12s; }
 
   .create-choice-card:hover {
     background: rgba(255, 255, 255, 0.1);
@@ -955,11 +962,6 @@
   .choice-arrow {
     font-size: 16px;
     color: var(--text-secondary);
-  }
-
-  @keyframes a17PopIn {
-    0% { opacity: 0; transform: translateY(8px) scale(0.97); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
   }
 </style>
 </head>
@@ -1058,20 +1060,17 @@
   </section>
 </div>
 
-<!-- BOTTOM BAR WITH CENTER CREATE BUTTON -->
+<!-- BOTTOM BAR: CREATE ON LEFT, 3 EQUAL TABS ON RIGHT -->
 <div class="bottom-nav-wrap">
   <div class="dock-bar">
+    <button type="button" class="dock-btn" id="tabCreate" onclick="openCreatePicker()">Create</button>
     <button type="button" class="dock-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
-    <button type="button" class="create-center-btn" id="tabCreate" onclick="openCreatePicker()">
-      <span class="plus-mark">+</span>
-      <span>Create</span>
-    </button>
     <button type="button" class="dock-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
     <button type="button" class="dock-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
   </div>
 </div>
 
-<!-- POPUP 1: CREATE MENU (HABIT / RULE & QUIZ / RECORD) -->
+<!-- POPUP 1: CREATE MENU -->
 <div id="createPickerModal" class="a17-backdrop" onclick="backdropClose(event, 'createPickerModal')">
   <div class="a17-sheet">
     <div class="sheet-handle"></div>
@@ -1419,7 +1418,6 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // LONG PRESS HELPER
   function attachLongPress(el, onTap, onLongPress) {
     let timer = null;
     let longTriggered = false;
@@ -1519,7 +1517,7 @@
     document.getElementById("progressFill").style.width = pct + "%";
 
     if (visible.length === 0) {
-      list.innerHTML = '<div class="empty-state">No habits yet. Tap "+ Create" below to add a habit.</div>';
+      list.innerHTML = '<div class="empty-state">No habits yet. Tap "Create" below to add a habit.</div>';
       return;
     }
 
@@ -1536,8 +1534,7 @@
         <div class="task-body">
           <div class="task-meta">
             <span class="time-badge">${task.time}</span>
-            <span class="tag-badge">${task.tag}</span>
-            ${isNow ? '<span class="now-badge">NOW</span>' : ''}
+            <span class="tag-badge">${task.tag}</span>${isNow ? '<span class="now-badge">NOW</span>' : ''}
           </div>
           <div class="task-title">${task.title}</div>
           <div class="task-desc">${task.desc}</div>
@@ -1678,7 +1675,7 @@
       `;
       const container = document.getElementById("rulesContainer");
       if (rules.length === 0) {
-        container.innerHTML = '<div class="empty-state">No rules added yet. Tap "+ Create" below to add one.</div>';
+        container.innerHTML = '<div class="empty-state">No rules added yet. Tap "Create" below to add one.</div>';
         return;
       }
 
@@ -1708,7 +1705,7 @@
     }
 
     if (rules.length === 0) {
-      card.innerHTML = '<div class="empty-state">Add at least one rule via "+ Create" to start your Daily Check-in.</div>';
+      card.innerHTML = '<div class="empty-state">Add at least one rule via "Create" to start your Daily Check-in.</div>';
       return;
     }
 
@@ -1930,115 +1927,4 @@
             <div class="ledger-name">${item.person}</div>
             <div class="task-meta" style="margin-top:4px;">
               <span class="tag-badge">${meta.label}</span>
-              <span class="tag-badge">${item.mode}</span>
-              <span class="tag-badge">${item.date}</span>
-              ${item.settled ? '<span class="now-badge" style="background:var(--success);">SETTLED</span>' : ''}
-            </div>
-          </div>
-          <div class="ledger-amt ${meta.color}">₹${Number(item.amount).toLocaleString("en-IN")}</div>
-        </div>
-        ${item.note ? `<div class="ledger-sub">${item.note}</div>` : ''}
-        <div class="ledger-actions">
-          ${canSettle
-            ? `<button type="button" class="chip-btn" onclick="event.stopPropagation(); toggleSettled(${item.id})">${item.settled ? 'Mark Pending' : 'Mark Settled'}</button>`
-            : '<span style="font-size:11.5px; color:var(--text-secondary);">Recorded</span>'
-          }
-          <span style="font-size:11px; color:var(--text-secondary);">Hold to Edit / Delete</span>
-        </div>
-      `;
-
-      attachLongPress(
-        card,
-        null,
-        () => openLongPressSheet({
-          title: item.person + " • ₹" + Number(item.amount).toLocaleString("en-IN"),
-          subtitle: meta.label + " • " + item.date,
-          onEdit: () => openLedgerModal(item),
-          onDelete: () => deleteLedger(item.id)
-        })
-      );
-
-      listEl.appendChild(card);
-    });
-  }
-
-  function setLedgerFilter(f) {
-    ledgerFilter = f;
-    renderLedger();
-  }
-
-  function openLedgerModal(item = null) {
-    switchTab("ledger");
-    if (item) {
-      editingLedgerId = item.id;
-      document.getElementById("ledgerModalTitle").textContent = "Edit Record";
-      document.getElementById("saveLedgerBtn").textContent = "Update Record";
-      document.getElementById("lType").value = item.type;
-      document.getElementById("lPerson").value = item.person;
-      document.getElementById("lAmount").value = item.amount;
-      document.getElementById("lMode").value = item.mode;
-      document.getElementById("lDate").value = item.date || todayKey;
-      document.getElementById("lNote").value = item.note || "";
-    } else {
-      editingLedgerId = null;
-      document.getElementById("ledgerModalTitle").textContent = "Add Record";
-      document.getElementById("saveLedgerBtn").textContent = "Save Record";
-      document.getElementById("lType").value = "expense";
-      document.getElementById("lPerson").value = "";
-      document.getElementById("lAmount").value = "";
-      document.getElementById("lMode").value = "UPI";
-      document.getElementById("lDate").value = todayKey;
-      document.getElementById("lNote").value = "";
-    }
-    openSheet("ledgerModal");
-  }
-
-  function saveLedgerModal() {
-    const type = document.getElementById("lType").value;
-    const person = document.getElementById("lPerson").value.trim();
-    const amount = parseFloat(document.getElementById("lAmount").value);
-    const mode = document.getElementById("lMode").value;
-    const date = document.getElementById("lDate").value || todayKey;
-    const note = document.getElementById("lNote").value.trim();
-
-    if (!person || isNaN(amount) || amount <= 0) {
-      return showToast("Enter valid name and amount");
-    }
-
-    if (editingLedgerId !== null) {
-      ledger = ledger.map(item => item.id === editingLedgerId ? {
-        ...item, type, person, amount, mode, date, note
-      } : item);
-      showToast("Record updated");
-    } else {
-      ledger.unshift({ id: Date.now(), type, person, amount, mode, date, note, settled: false });
-      showToast("Record saved");
-    }
-
-    saveData("ledger", ledger);
-    closeSheet("ledgerModal");
-    renderLedger();
-  }
-
-  function toggleSettled(id) {
-    ledger = ledger.map(item => item.id === id ? { ...item, settled: !item.settled } : item);
-    saveData("ledger", ledger);
-    renderLedger();
-  }
-
-  function deleteLedger(id) {
-    ledger = ledger.filter(item => item.id !== id);
-    saveData("ledger", ledger);
-    showToast("Record deleted");
-    renderLedger();
-  }
-
-  // ---------------- INIT ----------------
-  document.getElementById("lDate").value = todayKey;
-  renderLevel();
-  renderRoutine();
-  renderQuiz();
-  renderLedger();
-</script>
-</body>
-</html>
+              <span class
