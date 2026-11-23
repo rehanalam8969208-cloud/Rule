@@ -25,7 +25,6 @@
     --btn-active-text: #06070a;
 
     --accent: #38bdf8;
-    --accent-2: #818cf8;
     --success: #34d399;
     --warn: #fbbf24;
     --danger: #f87171;
@@ -49,7 +48,7 @@
 
   body {
     background: var(--bg-base);
-    padding: calc(env(safe-area-inset-top, 24px) + 22px) 14px calc(env(safe-area-inset-bottom, 20px) + 70px);
+    padding: calc(env(safe-area-inset-top, 24px) + 22px) 14px calc(env(safe-area-inset-bottom, 20px) + 92px);
     line-height: 1.45;
     position: relative;
   }
@@ -89,7 +88,7 @@
 
   .toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 84px;
     left: 50%;
     transform: translateX(-50%) translateY(80px);
     background: rgba(12, 14, 18, 0.92);
@@ -111,36 +110,12 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  .gate-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 5000;
-    background: rgba(5, 6, 9, 0.92);
-    backdrop-filter: blur(28px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-  .gate-overlay.open {
-    display: flex;
-  }
-  .gate-card {
-    width: 100%;
-    max-width: 400px;
-    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), #0d1017);
-    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
-    border-radius: var(--radius);
-    padding: 20px;
-  }
-
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
     gap: 8px;
-    flex-wrap: wrap;
   }
 
   .title-wrap h1 {
@@ -155,13 +130,6 @@
     margin-top: 2px;
   }
 
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
   .clock-pill {
     background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
     border: 1px solid var(--btn-border);
@@ -171,24 +139,6 @@
     font-weight: 600;
     color: var(--text-primary);
     white-space: nowrap;
-  }
-
-  .custom-toggle-btn {
-    background: var(--btn-bg);
-    border: 1px solid var(--btn-border);
-    color: var(--btn-text);
-    padding: 7px 11px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .custom-toggle-btn.active {
-    background: var(--btn-active-bg);
-    color: var(--btn-active-text);
-    border-color: var(--btn-active-bg);
   }
 
   .level-card {
@@ -245,16 +195,30 @@
     margin-top: 6px;
   }
 
+  .bottom-nav-wrap {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 14px calc(env(safe-area-inset-bottom, 12px) + 10px);
+    background: linear-gradient(to top, rgba(6, 7, 10, 0.96) 65%, rgba(6, 7, 10, 0));
+    z-index: 100;
+    pointer-events: none;
+  }
+
   .segmented {
+    max-width: 540px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
-    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    background: rgba(16, 19, 26, 0.88);
     border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     padding: 5px;
     border-radius: 16px;
-    margin-bottom: 16px;
     backdrop-filter: blur(var(--glass-blur));
+    pointer-events: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 
   .seg-btn {
@@ -644,19 +608,6 @@
     cursor: pointer;
   }
 
-  .secondary-btn {
-    width: 100%;
-    margin-top: 8px;
-    padding: 12px;
-    border: 1px solid var(--btn-border);
-    border-radius: 14px;
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
   .score-ring {
     width: 108px;
     height: 108px;
@@ -792,381 +743,188 @@
     color: var(--text-secondary);
     font-size: 13px;
   }
-
-  .cust-section {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    color: var(--text-secondary);
-    margin: 14px 0 6px;
-  }
-  .folder-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-  .color-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--btn-border);
-    margin-bottom: 6px;
-    font-size: 13px;
-  }
-  .color-row input[type="color"] {
-    width: 34px;
-    height: 26px;
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-  .slider-row {
-    padding: 9px 12px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--btn-border);
-    margin-bottom: 6px;
-  }
-  .slider-top {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-bottom: 5px;
-  }
-  .slider-top span:last-child {
-    color: var(--text-primary);
-    font-weight: 700;
-  }
-  .slider-row input[type="range"] {
-    width: 100%;
-  }
-  .code-area {
-    width: 100%;
-    height: 110px;
-    background: rgba(0, 0, 0, 0.55);
-    border: 1px solid var(--btn-border);
-    border-radius: 14px;
-    color: #f8fafc;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px;
-    padding: 10px;
-    margin-bottom: 8px;
-    resize: vertical;
-    outline: none;
-  }
 </style>
-<style id="lifeosLiveCss"></style>
 </head>
 <body>
-<div id="wallpaperLayer" class="wallpaper-layer"></div>
+<div class="wallpaper-layer"></div>
 <div class="wallpaper-dim"></div>
 
-<!-- APP PASSCODE LOCK GATE -->
-<div id="passLockGate" class="gate-overlay">
-  <div class="gate-card">
-    <h2 style="font-size:18px; margin-bottom:6px;">App Password Lock</h2>
-    <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px;">Enter passcode to unlock Life OS (Default: 1234).</p>
-    <div class="field">
-      <label>Passcode</label>
-      <input type="password" id="unlockPassInput" class="input" placeholder="Enter passcode">
-    </div>
-    <button type="button" class="primary-btn" onclick="verifyAppPasscode()">Unlock App</button>
-  </div>
-</div>
-
-<!-- LOGIN & SIGN UP GATE -->
-<div id="loginGate" class="gate-overlay">
-  <div class="gate-card">
-    <h2 style="font-size:18px; margin-bottom:6px;">Account — Sign In / Sign Up</h2>
-    <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px;">Create a new account or sign in with your user/email.</p>
-    <div class="field">
-      <label>User Name / Email</label>
-      <input type="text" id="loginUserInput" class="input" placeholder="e.g. rehan">
-    </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" id="loginPassInput" class="input" placeholder="Enter password">
-    </div>
-    <button type="button" class="primary-btn" onclick="submitLogin()">Sign In</button>
-    <button type="button" class="secondary-btn" onclick="submitSignUp()">Sign Up</button>
-    <button type="button" class="secondary-btn" onclick="closeLoginGate()">Cancel</button>
-  </div>
-</div>
-
 <div class="app">
-
   <div class="header">
     <div class="title-wrap">
       <h1>Life OS</h1>
       <p id="dateText">Personal Discipline & Ledger</p>
     </div>
-    <div class="header-right">
-      <button type="button" class="custom-toggle-btn" id="loginBtn" onclick="openLoginGate()">Login</button>
-      <button type="button" class="custom-toggle-btn" id="lockBtn" onclick="lockAppNow()">Lock</button>
-      <button type="button" class="custom-toggle-btn" id="customizeBtn" onclick="toggleCustomize()">Customize</button>
-      <div class="clock-pill" id="liveClock">--:--</div>
+    <div class="clock-pill" id="liveClock">--:--</div>
+  </div>
+
+  <!-- Level Banner -->
+  <div class="level-card">
+    <div class="level-top">
+      <div class="rank-badge">
+        <span class="lvl-pill" id="lvlBadge">LVL 1</span>
+        <span class="rank-name" id="rankName">Novice</span>
+      </div>
+      <span class="streak-pill" id="streakBadge">0 Day Streak</span>
+    </div>
+    <div class="bar-bg">
+      <div class="bar-fill xp-fill" id="xpFill"></div>
+    </div>
+    <div class="xp-meta">
+      <span id="xpProgressText">0 / 500 XP</span>
+      <span id="totalXpText">Total: 0 XP</span>
     </div>
   </div>
 
-  <!-- BOTTOM TOGGLE BAR FOR OPTIONS & SETTINGS -->
-  <div class="segmented" style="margin-bottom:12px;">
-    <button type="button" class="seg-btn active" id="optToggleApp" onclick="switchTopOption('app')">App</button>
-    <button type="button" class="seg-btn" id="optToggleTheme" onclick="switchTopOption('theme')">Theme</button>
-    <button type="button" class="seg-btn" id="optToggleCode" onclick="switchTopOption('code')">Code</button>
-  </div>
-
-  <!-- SEPARATE CODE EDITOR SECTION -->
-  <div class="card" id="codeSectionCard" style="display:none;">
-    <div class="progress-top" style="margin-bottom:6px;">
-      <span class="progress-label">Code Editor (CSS & JS)</span>
-      <button type="button" class="chip-btn" onclick="switchTopOption('app')">Back</button>
-    </div>
-
-    <div class="cust-section">Custom CSS</div>
-    <textarea id="liveCssCode" class="code-area" placeholder="/* Write custom CSS here */" spellcheck="false"></textarea>
-
-    <div class="cust-section">Custom JS</div>
-    <textarea id="liveJsCode" class="code-area" placeholder="// Write custom JS here" spellcheck="false"></textarea>
-
-    <div class="controls-row" style="margin-top:4px;">
-      <button type="button" class="chip-btn accent-chip" onclick="applyLiveCode()">Apply Code</button>
-      <button type="button" class="chip-btn" onclick="clearLiveCode()">Clear Code</button>
-    </div>
-  </div>
-
-  <!-- THEME & SETTINGS CUSTOMIZE PANEL -->
-  <div class="card" id="customizePanel" style="display:none;">
-    <div class="progress-top" style="margin-bottom:4px;">
-      <span class="progress-label">Theme & Settings</span>
-      <button type="button" class="chip-btn" onclick="switchTopOption('app')">Close</button>
-    </div>
-
-    <div class="cust-section">Account & App Passcode</div>
-    <div class="field">
-      <label>Change App Passcode</label>
-      <input type="text" id="newPasscodeInput" class="input" placeholder="New passcode (min 3 chars)">
-    </div>
-    <div class="controls-row" style="margin-top:4px; margin-bottom:10px;">
-      <button type="button" class="chip-btn accent-chip" onclick="saveNewPasscode()">Save Passcode</button>
-      <button type="button" class="chip-btn" onclick="openLoginGate()">Sign In / Sign Up</button>
-      <button type="button" class="chip-btn" onclick="logoutUser()">Logout</button>
-    </div>
-
-    <div class="cust-section">Theme Style Presets</div>
-    <div class="folder-grid" id="themePresetGrid"></div>
-
-    <div class="cust-section">Colors</div>
-    <div class="color-row"><span>Base Background</span><input type="color" id="cBgBase" value="#06070a" oninput="setThemeColor('bgBase', this.value)"></div>
-    <div class="color-row"><span>Card Tint</span><input type="color" id="cCardColor" value="#ffffff" oninput="setThemeColor('cardColor', this.value)"></div>
-    <div class="color-row"><span>Primary Text</span><input type="color" id="cTextPrimary" value="#ffffff" oninput="setThemeColor('textPrimary', this.value)"></div>
-    <div class="color-row"><span>Active Button Fill</span><input type="color" id="cBtnActiveBg" value="#ffffff" oninput="setThemeColor('btnActiveBg', this.value)"></div>
-    <div class="color-row"><span>Active Button Text</span><input type="color" id="cBtnActiveText" value="#06070a" oninput="setThemeColor('btnActiveText', this.value)"></div>
-
-    <div class="cust-section">Glass, Radius & Wallpaper</div>
-    <div class="controls-row" style="margin-top:4px; margin-bottom:8px;">
-      <button type="button" class="chip-btn accent-chip" onclick="document.getElementById('wpFileInput').click()">Set Wallpaper</button>
-      <button type="button" class="chip-btn" onclick="clearLifeWallpaper()">Clear Wallpaper</button>
-    </div>
-    <input type="file" id="wpFileInput" accept="image/*" style="display:none;" onchange="setLifeWallpaper(event)">
-
-    <div class="slider-row">
-      <div class="slider-top"><span>Glass Transparency</span><span id="vAlpha">8%</span></div>
-      <input type="range" id="sAlpha" min="0" max="45" value="8" oninput="updateThemeSliders()">
-    </div>
-    <div class="slider-row">
-      <div class="slider-top"><span>Glass Blur</span><span id="vBlur">24px</span></div>
-      <input type="range" id="sBlur" min="0" max="45" value="24" oninput="updateThemeSliders()">
-    </div>
-    <div class="slider-row">
-      <div class="slider-top"><span>Corner Radius</span><span id="vRadius">26px</span></div>
-      <input type="range" id="sRadius" min="8" max="34" value="26" oninput="updateThemeSliders()">
-    </div>
-    <div class="slider-row">
-      <div class="slider-top"><span>Wallpaper Dim</span><span id="vDim">45%</span></div>
-      <input type="range" id="sDim" min="0" max="85" value="45" oninput="updateThemeSliders()">
-    </div>
-
-    <div class="controls-row" style="margin-top:8px;">
-      <button type="button" class="chip-btn accent-chip" onclick="saveThemePreset()">Save Style</button>
-      <button type="button" class="chip-btn" onclick="resetThemePreset()">Reset Default</button>
-    </div>
-  </div>
-
-  <!-- MAIN LIFE OS CONTENT WRAPPER -->
-  <div id="mainLifeOsContent">
-    <!-- Level Banner -->
-    <div class="level-card">
-      <div class="level-top">
-        <div class="rank-badge">
-          <span class="lvl-pill" id="lvlBadge">LVL 1</span>
-          <span class="rank-name" id="rankName">Novice</span>
-        </div>
-        <span class="streak-pill" id="streakBadge">0 Day Streak</span>
+  <!-- VIEW 1: ROUTINE -->
+  <section id="viewRoutine" class="view active">
+    <div class="card">
+      <div class="progress-top">
+        <span class="progress-label" id="progressText">0 / 0 Habits Complete</span>
+        <span class="progress-pct" id="progressPct">0%</span>
       </div>
       <div class="bar-bg">
-        <div class="bar-fill xp-fill" id="xpFill"></div>
+        <div class="bar-fill" id="progressFill"></div>
       </div>
-      <div class="xp-meta">
-        <span id="xpProgressText">0 / 500 XP</span>
-        <span id="totalXpText">Total: 0 XP</span>
+      <div class="controls-row">
+        <button type="button" class="chip-btn" id="workdayBtn" onclick="toggleWorkdayMode()">Workday Mode: OFF</button>
+        <button type="button" class="chip-btn accent-chip" onclick="toggleForm('habitForm')">+ Add Habit</button>
+      </div>
+
+      <div class="form-box" id="habitForm">
+        <div class="form-grid">
+          <div class="field">
+            <label>Start Time (24h)</label>
+            <input type="time" id="hStart" class="input" value="07:00">
+          </div>
+          <div class="field">
+            <label>End Time (24h)</label>
+            <input type="time" id="hEnd" class="input" value="08:00">
+          </div>
+        </div>
+        <div class="field">
+          <label>Habit Title</label>
+          <input type="text" id="hTitle" class="input" placeholder="e.g., Reading Technical Books">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="hDesc" class="input" placeholder="Short action note">
+        </div>
+        <div class="field">
+          <label>Category Tag</label>
+          <input type="text" id="hTag" class="input" placeholder="e.g., Fitness, Study, Skill">
+        </div>
+        <label class="check-row">
+          <input type="checkbox" id="hEssential" checked>
+          Keep active during Workday Mode
+        </label>
+        <button type="button" class="primary-btn" onclick="addHabit()">Save Habit</button>
       </div>
     </div>
 
-    <!-- Main Tabs -->
-    <div class="segmented">
-      <button type="button" class="seg-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
-      <button type="button" class="seg-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
-      <button type="button" class="seg-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
+    <div class="routine-list" id="routineList"></div>
+  </section>
+
+  <!-- VIEW 2: RULES & QUIZ -->
+  <section id="viewQuiz" class="view">
+    <div class="card quiz-header-card">
+      <h2>Principles & Daily Check-in</h2>
+      <p>Evaluate your discipline daily (+30 XP max per day).</p>
+      <div class="quiz-mode-switch">
+        <button type="button" class="chip-btn active-mode" id="modeCheckin" onclick="setQuizMode('checkin')">Daily Check-in</button>
+        <button type="button" class="chip-btn" id="modeList" onclick="setQuizMode('list')">All Rules</button>
+      </div>
     </div>
 
-    <!-- VIEW 1: ROUTINE -->
-    <section id="viewRoutine" class="view active">
-      <div class="card">
-        <div class="progress-top">
-          <span class="progress-label" id="progressText">0 / 0 Habits Complete</span>
-          <span class="progress-pct" id="progressPct">0%</span>
-        </div>
-        <div class="bar-bg">
-          <div class="bar-fill" id="progressFill"></div>
-        </div>
-        <div class="controls-row">
-          <button type="button" class="chip-btn" id="workdayBtn" onclick="toggleWorkdayMode()">Workday Mode: OFF</button>
-          <button type="button" class="chip-btn accent-chip" onclick="toggleForm('habitForm')">+ Add Habit</button>
-        </div>
+    <div class="card pause-tool">
+      <div>
+        <div style="font-size:14px; font-weight:700;">3-Second Pause Practice</div>
+        <div style="font-size:12px; color:var(--text-secondary);" id="pauseStatus">Pause 3 seconds before responding</div>
+      </div>
+      <button type="button" class="pause-btn" id="pauseBtn" onclick="startPauseTimer()">Start 3s</button>
+    </div>
 
-        <div class="form-box" id="habitForm">
-          <div class="form-grid">
-            <div class="field">
-              <label>Start Time (24h)</label>
-              <input type="time" id="hStart" class="input" value="07:00">
-            </div>
-            <div class="field">
-              <label>End Time (24h)</label>
-              <input type="time" id="hEnd" class="input" value="08:00">
-            </div>
-          </div>
-          <div class="field">
-            <label>Habit Title</label>
-            <input type="text" id="hTitle" class="input" placeholder="e.g., Reading Technical Books">
-          </div>
-          <div class="field">
-            <label>Description</label>
-            <input type="text" id="hDesc" class="input" placeholder="Short action note">
-          </div>
-          <div class="field">
-            <label>Category Tag</label>
-            <input type="text" id="hTag" class="input" placeholder="e.g., Fitness, Study, Skill">
-          </div>
-          <label class="check-row">
-            <input type="checkbox" id="hEssential" checked>
-            Keep active during Workday Mode
-          </label>
-          <button type="button" class="primary-btn" onclick="addHabit()">Save Habit</button>
-        </div>
+    <div class="card" id="quizCard"></div>
+  </section>
+
+  <!-- VIEW 3: FINANCE LEDGER -->
+  <section id="viewLedger" class="view">
+    <div class="summary-grid">
+      <div class="stat-card">
+        <div class="stat-label">To Receive</div>
+        <div class="stat-val c-green" id="sumReceive">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">To Pay / Loans</div>
+        <div class="stat-val c-red" id="sumPay">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Expenses</div>
+        <div class="stat-val c-amber" id="sumExpense">₹0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="progress-top" style="margin-bottom:0;">
+        <span class="progress-label">Financial Records</span>
+        <button type="button" class="chip-btn accent-chip" onclick="toggleForm('ledgerForm')">+ Add Record</button>
       </div>
 
-      <div class="routine-list" id="routineList"></div>
-    </section>
-
-    <!-- VIEW 2: RULES & QUIZ -->
-    <section id="viewQuiz" class="view">
-      <div class="card quiz-header-card">
-        <h2>Principles & Daily Check-in</h2>
-        <p>Evaluate your discipline daily (+30 XP max per day).</p>
-        <div class="quiz-mode-switch">
-          <button type="button" class="chip-btn active-mode" id="modeCheckin" onclick="setQuizMode('checkin')">Daily Check-in</button>
-          <button type="button" class="chip-btn" id="modeList" onclick="setQuizMode('list')">All Rules</button>
+      <div class="form-box" id="ledgerForm">
+        <div class="field">
+          <label>Record Type</label>
+          <select id="lType">
+            <option value="given">Money Given (Lent)</option>
+            <option value="taken">Money Taken (Borrowed)</option>
+            <option value="loan">Loan / EMI</option>
+            <option value="expense">Personal Expense</option>
+            <option value="income">Income / Received</option>
+          </select>
         </div>
-      </div>
-
-      <div class="card pause-tool">
-        <div>
-          <div style="font-size:14px; font-weight:700;">3-Second Pause Practice</div>
-          <div style="font-size:12px; color:var(--text-secondary);" id="pauseStatus">Pause 3 seconds before responding</div>
-        </div>
-        <button type="button" class="pause-btn" id="pauseBtn" onclick="startPauseTimer()">Start 3s</button>
-      </div>
-
-      <div class="card" id="quizCard"></div>
-    </section>
-
-    <!-- VIEW 3: FINANCE LEDGER -->
-    <section id="viewLedger" class="view">
-      <div class="summary-grid">
-        <div class="stat-card">
-          <div class="stat-label">To Receive</div>
-          <div class="stat-val c-green" id="sumReceive">₹0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">To Pay / Loans</div>
-          <div class="stat-val c-red" id="sumPay">₹0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Expenses</div>
-          <div class="stat-val c-amber" id="sumExpense">₹0</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="progress-top" style="margin-bottom:0;">
-          <span class="progress-label">Financial Records</span>
-          <button type="button" class="chip-btn accent-chip" onclick="toggleForm('ledgerForm')">+ Add Record</button>
-        </div>
-
-        <div class="form-box" id="ledgerForm">
+        <div class="form-grid">
           <div class="field">
-            <label>Record Type</label>
-            <select id="lType">
-              <option value="given">Money Given (Lent)</option>
-              <option value="taken">Money Taken (Borrowed)</option>
-              <option value="loan">Loan / EMI</option>
-              <option value="expense">Personal Expense</option>
-              <option value="income">Income / Received</option>
+            <label>Person / Title</label>
+            <input type="text" id="lPerson" class="input" placeholder="Name or item">
+          </div>
+          <div class="field">
+            <label>Amount (₹)</label>
+            <input type="number" id="lAmount" class="input" placeholder="0">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Payment Mode</label>
+            <select id="lMode">
+              <option value="UPI">UPI</option>
+              <option value="Cash">Cash</option>
+              <option value="Bank">Bank Transfer</option>
             </select>
           </div>
-          <div class="form-grid">
-            <div class="field">
-              <label>Person / Title</label>
-              <input type="text" id="lPerson" class="input" placeholder="Name or item">
-            </div>
-            <div class="field">
-              <label>Amount (₹)</label>
-              <input type="number" id="lAmount" class="input" placeholder="0">
-            </div>
-          </div>
-          <div class="form-grid">
-            <div class="field">
-              <label>Payment Mode</label>
-              <select id="lMode">
-                <option value="UPI">UPI</option>
-                <option value="Cash">Cash</option>
-                <option value="Bank">Bank Transfer</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Date</label>
-              <input type="date" id="lDate" class="input">
-            </div>
-          </div>
           <div class="field">
-            <label>Note / Purpose</label>
-            <input type="text" id="lNote" class="input" placeholder="Optional details">
+            <label>Date</label>
+            <input type="date" id="lDate" class="input">
           </div>
-          <button type="button" class="primary-btn" onclick="addLedgerEntry()">Save Record</button>
         </div>
+        <div class="field">
+          <label>Note / Purpose</label>
+          <input type="text" id="lNote" class="input" placeholder="Optional details">
+        </div>
+        <button type="button" class="primary-btn" onclick="addLedgerEntry()">Save Record</button>
       </div>
+    </div>
 
-      <div class="filter-scroll" id="ledgerFilters"></div>
-      <div id="ledgerList"></div>
-    </section>
+    <div class="filter-scroll" id="ledgerFilters"></div>
+    <div id="ledgerList"></div>
+  </section>
+</div>
+
+<!-- BOTTOM TOGGLE BAR -->
+<div class="bottom-nav-wrap">
+  <div class="segmented">
+    <button type="button" class="seg-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
+    <button type="button" class="seg-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
+    <button type="button" class="seg-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
   </div>
-
 </div>
 
 <div id="toast" class="toast"></div>
@@ -1201,261 +959,6 @@
     toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
   }
 
-  // ---------------- TOP TOGGLE (APP / THEME / CODE) ----------------
-  function switchTopOption(mode) {
-    document.getElementById("optToggleApp").classList.toggle("active", mode === "app");
-    document.getElementById("optToggleTheme").classList.toggle("active", mode === "theme");
-    document.getElementById("optToggleCode").classList.toggle("active", mode === "code");
-
-    document.getElementById("customizePanel").style.display = mode === "theme" ? "block" : "none";
-    document.getElementById("codeSectionCard").style.display = mode === "code" ? "block" : "none";
-    document.getElementById("customizeBtn").classList.toggle("active", mode === "theme");
-  }
-
-  function toggleCustomize() {
-    const isThemeOpen = document.getElementById("customizePanel").style.display === "block";
-    switchTopOption(isThemeOpen ? "app" : "theme");
-  }
-
-  // ---------------- PASSCODE & LOGIN / SIGNUP ----------------
-  let appPasscode = loadData("app_passcode", "1234");
-  let isAppLocked = loadData("app_locked", false);
-  let registeredUsers = loadData("registered_users", {});
-  let currentUser = loadData("current_user", "");
-
-  function refreshAuthButtons() {
-    const lBtn = document.getElementById("loginBtn");
-    lBtn.textContent = currentUser ? currentUser : "Login";
-  }
-
-  function openLoginGate() {
-    document.getElementById("loginUserInput").value = currentUser || "";
-    document.getElementById("loginPassInput").value = "";
-    document.getElementById("loginGate").classList.add("open");
-  }
-
-  function closeLoginGate() {
-    document.getElementById("loginGate").classList.remove("open");
-  }
-
-  function submitSignUp() {
-    const u = document.getElementById("loginUserInput").value.trim().toLowerCase();
-    const p = document.getElementById("loginPassInput").value;
-    if (!u || !p) return showToast("Enter username and password");
-    if (p.length < 4) return showToast("Password min 4 chars");
-    registeredUsers[u] = p;
-    saveData("registered_users", registeredUsers);
-    currentUser = u;
-    saveData("current_user", currentUser);
-    closeLoginGate();
-    refreshAuthButtons();
-    showToast("Account created & signed in: " + u);
-  }
-
-  function submitLogin() {
-    const u = document.getElementById("loginUserInput").value.trim().toLowerCase();
-    const p = document.getElementById("loginPassInput").value;
-    if (!u || !p) return showToast("Enter username and password");
-    if (registeredUsers[u] && registeredUsers[u] !== p) {
-      return showToast("Wrong password for " + u);
-    }
-    if (!registeredUsers[u]) {
-      registeredUsers[u] = p;
-      saveData("registered_users", registeredUsers);
-    }
-    currentUser = u;
-    saveData("current_user", currentUser);
-    closeLoginGate();
-    refreshAuthButtons();
-    showToast("Signed in as " + u);
-  }
-
-  function logoutUser() {
-    currentUser = "";
-    saveData("current_user", "");
-    refreshAuthButtons();
-    showToast("Logged out");
-  }
-
-  function lockAppNow() {
-    isAppLocked = true;
-    saveData("app_locked", true);
-    document.getElementById("unlockPassInput").value = "";
-    document.getElementById("passLockGate").classList.add("open");
-  }
-
-  function verifyAppPasscode() {
-    const entered = document.getElementById("unlockPassInput").value;
-    if (entered === appPasscode) {
-      isAppLocked = false;
-      saveData("app_locked", false);
-      document.getElementById("passLockGate").classList.remove("open");
-      showToast("Unlocked");
-    } else {
-      showToast("Wrong passcode");
-    }
-  }
-
-  function saveNewPasscode() {
-    const np = document.getElementById("newPasscodeInput").value.trim();
-    if (np.length < 3) return showToast("Passcode min 3 chars");
-    appPasscode = np;
-    saveData("app_passcode", appPasscode);
-    document.getElementById("newPasscodeInput").value = "";
-    showToast("App passcode updated");
-  }
-
-  // ---------------- THEME STYLE, WALLPAPER & CODE ----------------
-  const BASE_PRESETS = {
-    "Pure Glass": { bgBase: "#06070a", cardColor: "#ffffff", textPrimary: "#ffffff", btnActiveBg: "#ffffff", btnActiveText: "#06070a", cardAlpha: 0.08, blur: 24, radius: 26, dim: 45 },
-    "Pure White": { bgBase: "#f8fafc", cardColor: "#0f172a", textPrimary: "#0f172a", btnActiveBg: "#0f172a", btnActiveText: "#ffffff", cardAlpha: 0.06, blur: 20, radius: 24, dim: 15 },
-    "Obsidian": { bgBase: "#000000", cardColor: "#ffffff", textPrimary: "#ffffff", btnActiveBg: "#ffffff", btnActiveText: "#000000", cardAlpha: 0.14, blur: 32, radius: 20, dim: 65 },
-    "Frosted": { bgBase: "#0c0f14", cardColor: "#ffffff", textPrimary: "#ffffff", btnActiveBg: "#ffffff", btnActiveText: "#0c0f14", cardAlpha: 0.18, blur: 28, radius: 28, dim: 35 }
-  };
-
-  let themePresets = loadData("theme_presets", JSON.parse(JSON.stringify(BASE_PRESETS)));
-  let activePresetName = loadData("active_preset", "Pure Glass");
-  let activeThemeCfg = loadData("active_theme_cfg", JSON.parse(JSON.stringify(themePresets[activePresetName] || BASE_PRESETS["Pure Glass"])));
-
-  function applyThemeCfg(cfg) {
-    const r = document.documentElement.style;
-    r.setProperty("--bg-base", cfg.bgBase);
-    r.setProperty("--card-color", cfg.cardColor);
-    r.setProperty("--border-color", cfg.cardColor);
-    r.setProperty("--text-primary", cfg.textPrimary);
-    r.setProperty("--btn-text", cfg.textPrimary);
-    r.setProperty("--btn-active-bg", cfg.btnActiveBg);
-    r.setProperty("--btn-active-text", cfg.btnActiveText);
-    r.setProperty("--card-alpha", cfg.cardAlpha);
-    r.setProperty("--glass-blur", cfg.blur + "px");
-    r.setProperty("--radius", cfg.radius + "px");
-    r.setProperty("--bg-dim", (cfg.dim / 100).toFixed(2));
-
-    document.getElementById("cBgBase").value = cfg.bgBase;
-    document.getElementById("cCardColor").value = cfg.cardColor;
-    document.getElementById("cTextPrimary").value = cfg.textPrimary;
-    document.getElementById("cBtnActiveBg").value = cfg.btnActiveBg;
-    document.getElementById("cBtnActiveText").value = cfg.btnActiveText;
-
-    document.getElementById("sAlpha").value = Math.round(cfg.cardAlpha * 100);
-    document.getElementById("vAlpha").textContent = Math.round(cfg.cardAlpha * 100) + "%";
-    document.getElementById("sBlur").value = cfg.blur;
-    document.getElementById("vBlur").textContent = cfg.blur + "px";
-    document.getElementById("sRadius").value = cfg.radius;
-    document.getElementById("vRadius").textContent = cfg.radius + "px";
-    document.getElementById("sDim").value = cfg.dim;
-    document.getElementById("vDim").textContent = cfg.dim + "%";
-  }
-
-  function renderThemePresets() {
-    const grid = document.getElementById("themePresetGrid");
-    grid.innerHTML = "";
-    Object.keys(themePresets).forEach(name => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "chip-btn" + (name === activePresetName ? " active-mode" : "");
-      btn.textContent = name;
-      btn.onclick = () => {
-        activePresetName = name;
-        activeThemeCfg = JSON.parse(JSON.stringify(themePresets[name]));
-        saveData("active_preset", activePresetName);
-        saveData("active_theme_cfg", activeThemeCfg);
-        applyThemeCfg(activeThemeCfg);
-        renderThemePresets();
-        showToast("Style: " + name);
-      };
-      grid.appendChild(btn);
-    });
-  }
-
-  function setThemeColor(key, val) {
-    activeThemeCfg[key] = val;
-    saveData("active_theme_cfg", activeThemeCfg);
-    applyThemeCfg(activeThemeCfg);
-  }
-
-  function updateThemeSliders() {
-    activeThemeCfg.cardAlpha = Number(document.getElementById("sAlpha").value) / 100;
-    activeThemeCfg.blur = Number(document.getElementById("sBlur").value);
-    activeThemeCfg.radius = Number(document.getElementById("sRadius").value);
-    activeThemeCfg.dim = Number(document.getElementById("sDim").value);
-    saveData("active_theme_cfg", activeThemeCfg);
-    applyThemeCfg(activeThemeCfg);
-  }
-
-  function saveThemePreset() {
-    themePresets[activePresetName] = JSON.parse(JSON.stringify(activeThemeCfg));
-    saveData("theme_presets", themePresets);
-    saveData("active_preset", activePresetName);
-    renderThemePresets();
-    showToast("Saved style: " + activePresetName);
-  }
-
-  function resetThemePreset() {
-    themePresets = JSON.parse(JSON.stringify(BASE_PRESETS));
-    activePresetName = "Pure Glass";
-    activeThemeCfg = JSON.parse(JSON.stringify(BASE_PRESETS["Pure Glass"]));
-    saveData("theme_presets", themePresets);
-    saveData("active_preset", activePresetName);
-    saveData("active_theme_cfg", activeThemeCfg);
-    applyThemeCfg(activeThemeCfg);
-    renderThemePresets();
-    showToast("Style reset");
-  }
-
-  function setLifeWallpaper(e) {
-    const file = e.target.files[0];
-    e.target.value = "";
-    if (!file) return;
-    const img = new Image();
-    img.onload = () => {
-      const maxDim = 900;
-      let w = img.width, h = img.height;
-      if (w > maxDim || h > maxDim) {
-        const ratio = Math.min(maxDim / w, maxDim / h);
-        w = Math.round(w * ratio);
-        h = Math.round(h * ratio);
-      }
-      const c = document.createElement("canvas");
-      c.width = w;
-      c.height = h;
-      c.getContext("2d").drawImage(img, 0, 0, w, h);
-      const dataUrl = c.toDataURL("image/jpeg", 0.72);
-      saveData("wallpaper_url", dataUrl);
-      document.getElementById("wallpaperLayer").style.backgroundImage = `url(${dataUrl})`;
-      showToast("Wallpaper set");
-    };
-    img.src = URL.createObjectURL(file);
-  }
-
-  function clearLifeWallpaper() {
-    saveData("wallpaper_url", "");
-    document.getElementById("wallpaperLayer").style.backgroundImage = "";
-    showToast("Wallpaper cleared");
-  }
-
-  function applyLiveCode() {
-    const css = document.getElementById("liveCssCode").value;
-    const js = document.getElementById("liveJsCode").value;
-    document.getElementById("lifeosLiveCss").textContent = css;
-    saveData("custom_css", css);
-    saveData("custom_js", js);
-    if (js.trim()) {
-      try { new Function(js)(); } catch (err) { console.error(err); }
-    }
-    showToast("Code applied");
-  }
-
-  function clearLiveCode() {
-    document.getElementById("liveCssCode").value = "";
-    document.getElementById("liveJsCode").value = "";
-    document.getElementById("lifeosLiveCss").textContent = "";
-    saveData("custom_css", "");
-    saveData("custom_js", "");
-    showToast("Code cleared");
-  }
-
-  // ---------------- ORIGINAL LIFE OS DATA & LOGIC ----------------
   const defaultHabits = [
     { id: 1, start: 5.0, end: 6.0, time: "05:00 - 06:00 AM", title: "Wake Up, 60 Push-ups & Stretching", desc: "Wake up at 5:00 AM sharp for 1 hour of bodyweight training and mobility.", tag: "Fitness", essential: true },
     { id: 2, start: 6.0, end: 7.0, time: "06:00 - 07:00 AM", title: "Room Cleanup & Dishes", desc: "Organize living space and clean utensils.", tag: "Cleanliness", essential: true },
@@ -1572,6 +1075,7 @@
       document.getElementById("tab" + cap).classList.toggle("active", t === tab);
       document.getElementById("view" + cap).classList.toggle("active", t === tab);
     });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function toggleForm(id) {
@@ -2035,28 +1539,6 @@
 
   // ---------------- INIT ----------------
   document.getElementById("lDate").value = todayKey;
-
-  const savedWp = loadData("wallpaper_url", "");
-  if (savedWp) {
-    document.getElementById("wallpaperLayer").style.backgroundImage = `url(${savedWp})`;
-  }
-
-  const savedCss = loadData("custom_css", "");
-  const savedJs = loadData("custom_js", "");
-  document.getElementById("liveCssCode").value = savedCss;
-  document.getElementById("liveJsCode").value = savedJs;
-  document.getElementById("lifeosLiveCss").textContent = savedCss;
-  if (savedJs.trim()) {
-    try { new Function(savedJs)(); } catch (err) { console.error(err); }
-  }
-
-  refreshAuthButtons();
-  if (isAppLocked) {
-    document.getElementById("passLockGate").classList.add("open");
-  }
-
-  renderThemePresets();
-  applyThemeCfg(activeThemeCfg);
   renderLevel();
   renderRoutine();
   renderQuiz();
