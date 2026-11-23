@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Life OS — Routine, Rules & Ledger</title>
 <style>
   :root {
     --bg-1: #0b0f19;
-    --bg-2: #121829;
-    --glass: rgba(255, 255, 255, 0.06);
-    --glass-strong: rgba(255, 255, 255, 0.11);
-    --border: rgba(255, 255, 255, 0.12);
+    --card-bg: rgba(20, 27, 45, 0.88);
+    --card-bg-hover: rgba(30, 41, 66, 0.92);
+    --border: rgba(255, 255, 255, 0.13);
     --text: #f5f7fa;
     --muted: #9aa4b8;
     --accent: #38bdf8;
@@ -28,18 +27,56 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-    background: radial-gradient(circle at 15% 10%, #1e293b 0%, var(--bg-1) 45%, #060911 100%);
+  html, body {
+    touch-action: manipulation;
+    background-color: #0b0f19;
     color: var(--text);
-    min-height: 100vh;
-    padding: 16px 14px 96px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    background: linear-gradient(160deg, #162033 0%, #0b0f19 45%, #060911 100%);
+    padding: calc(env(safe-area-inset-top, 24px) + 26px) 14px calc(env(safe-area-inset-bottom, 20px) + 80px);
     line-height: 1.45;
+  }
+
+  button, input, select {
+    font-family: inherit;
+    touch-action: manipulation;
   }
 
   .app {
     max-width: 540px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1e293b;
+    border: 1px solid var(--accent);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    white-space: nowrap;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 
   /* Header */
@@ -63,10 +100,8 @@
   }
 
   .clock-pill {
-    background: var(--glass);
+    background: var(--card-bg);
     border: 1px solid var(--border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     padding: 7px 12px;
     border-radius: 999px;
     font-size: 12.5px;
@@ -77,11 +112,9 @@
 
   /* Level Banner */
   .level-card {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(129, 140, 248, 0.14));
-    border: 1px solid rgba(129, 140, 248, 0.3);
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(129, 140, 248, 0.18));
+    border: 1px solid rgba(129, 140, 248, 0.35);
     border-radius: var(--radius);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
     padding: 14px 16px;
     margin-bottom: 16px;
   }
@@ -131,17 +164,15 @@
     margin-top: 6px;
   }
 
-  /* Segmented Control (3 Tabs) */
+  /* Segmented Control */
   .segmented {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     border: 1px solid var(--border);
     padding: 5px;
     border-radius: 16px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     margin-bottom: 16px;
   }
 
@@ -151,40 +182,30 @@
     color: var(--muted);
     font-size: 13px;
     font-weight: 600;
-    padding: 10px 6px;
+    padding: 11px 6px;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.25s ease;
   }
 
   .seg-btn.active {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(129, 140, 248, 0.25));
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(129, 140, 248, 0.28));
     color: #fff;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.16);
   }
 
   /* Views */
   .view {
     display: none;
-    animation: fadeIn 0.25s ease;
   }
   .view.active {
     display: block;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Glass Card */
+  /* Card */
   .card {
-    background: var(--glass);
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
     padding: 16px;
     margin-bottom: 14px;
   }
@@ -210,7 +231,7 @@
   .bar-bg {
     width: 100%;
     height: 7px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 999px;
     overflow: hidden;
   }
@@ -220,7 +241,7 @@
     width: 0%;
     background: linear-gradient(90deg, var(--accent), var(--success));
     border-radius: 999px;
-    transition: width 0.35s ease;
+    transition: width 0.25s ease;
   }
 
   .bar-fill.xp-fill {
@@ -237,31 +258,26 @@
   }
 
   .chip-btn {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid var(--border);
     color: var(--text);
     font-size: 12px;
     font-weight: 600;
-    padding: 7px 12px;
+    padding: 8px 13px;
     border-radius: 999px;
     cursor: pointer;
-    transition: 0.2s;
   }
 
   .chip-btn.active-mode {
-    background: rgba(251, 191, 36, 0.18);
-    border-color: rgba(251, 191, 36, 0.5);
+    background: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.55);
     color: var(--warn);
   }
 
   .chip-btn.accent-chip {
-    background: rgba(56, 189, 248, 0.18);
-    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.5);
     color: var(--accent);
-  }
-
-  .chip-btn:active {
-    transform: scale(0.96);
   }
 
   /* Forms */
@@ -296,12 +312,12 @@
 
   .input, select {
     width: 100%;
-    background: rgba(11, 15, 25, 0.75);
+    background: #0b101d;
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 10px 12px;
+    padding: 11px 12px;
     border-radius: 12px;
-    font-size: 13.5px;
+    font-size: 14px;
     outline: none;
   }
 
@@ -329,17 +345,17 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    background: var(--glass);
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 18px;
     padding: 14px;
     cursor: pointer;
-    transition: all 0.22s ease;
+    touch-action: manipulation;
   }
 
   .task-item.done {
-    opacity: 0.56;
-    border-color: rgba(52, 211, 153, 0.3);
+    opacity: 0.58;
+    border-color: rgba(52, 211, 153, 0.35);
   }
 
   .task-item.done .task-title {
@@ -348,8 +364,8 @@
   }
 
   .task-item.current-slot {
-    border-color: rgba(56, 189, 248, 0.6);
-    background: rgba(56, 189, 248, 0.09);
+    border-color: rgba(56, 189, 248, 0.7);
+    background: rgba(24, 45, 74, 0.92);
   }
 
   .task-item.hidden-workday {
@@ -357,11 +373,11 @@
   }
 
   .check-circle {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -393,7 +409,7 @@
     font-size: 11px;
     font-weight: 700;
     color: var(--accent);
-    background: rgba(56, 189, 248, 0.14);
+    background: rgba(56, 189, 248, 0.16);
     padding: 3px 8px;
     border-radius: 8px;
   }
@@ -402,7 +418,7 @@
     font-size: 10.5px;
     font-weight: 600;
     color: var(--muted);
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.08);
     padding: 3px 7px;
     border-radius: 8px;
   }
@@ -428,18 +444,26 @@
   }
 
   .del-icon {
-    background: rgba(248, 113, 113, 0.12);
-    border: 1px solid rgba(248, 113, 113, 0.25);
+    background: rgba(248, 113, 113, 0.15);
+    border: 1px solid rgba(248, 113, 113, 0.3);
     color: var(--danger);
-    width: 28px;
-    height: 28px;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
     border-radius: 10px;
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
     flex-shrink: 0;
   }
 
-  /* Quiz Interface */
+  .del-icon.confirming {
+    background: var(--danger);
+    color: #fff;
+    font-size: 11px;
+  }
+
+  /* Quiz */
   .quiz-header-card {
     text-align: center;
   }
@@ -485,7 +509,7 @@
     text-transform: uppercase;
     letter-spacing: 0.6px;
     color: var(--accent-2);
-    background: rgba(129, 140, 248, 0.16);
+    background: rgba(129, 140, 248, 0.18);
     padding: 4px 10px;
     border-radius: 999px;
     margin-bottom: 10px;
@@ -511,26 +535,26 @@
 
   .opt-btn {
     text-align: left;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 13px 14px;
+    padding: 14px;
     border-radius: 14px;
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
   }
 
-  .opt-btn.correct { background: rgba(52, 211, 153, 0.16); border-color: var(--success); color: #d1fae5; }
-  .opt-btn.mid { background: rgba(251, 191, 36, 0.15); border-color: var(--warn); color: #fef3c7; }
-  .opt-btn.wrong { background: rgba(248, 113, 113, 0.16); border-color: var(--danger); color: #fee2e2; }
+  .opt-btn.correct { background: rgba(52, 211, 153, 0.2); border-color: var(--success); color: #d1fae5; }
+  .opt-btn.mid { background: rgba(251, 191, 36, 0.18); border-color: var(--warn); color: #fef3c7; }
+  .opt-btn.wrong { background: rgba(248, 113, 113, 0.2); border-color: var(--danger); color: #fee2e2; }
 
   .feedback-box {
     margin-top: 12px;
     padding: 11px 13px;
     border-radius: 13px;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.28);
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
     font-size: 12.5px;
     color: #e0f2fe;
     display: none;
@@ -539,7 +563,7 @@
   .primary-btn {
     width: 100%;
     margin-top: 14px;
-    padding: 12px;
+    padding: 13px;
     border: none;
     border-radius: 14px;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -558,7 +582,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(56, 189, 248, 0.1);
+    background: rgba(56, 189, 248, 0.12);
     border: 4px solid var(--success);
   }
   .score-ring .big { font-size: 26px; font-weight: 800; }
@@ -582,12 +606,12 @@
   }
 
   .pause-btn {
-    background: rgba(129, 140, 248, 0.22);
-    border: 1px solid rgba(129, 140, 248, 0.5);
+    background: rgba(129, 140, 248, 0.25);
+    border: 1px solid rgba(129, 140, 248, 0.55);
     color: #fff;
     font-weight: 700;
-    font-size: 12.5px;
-    padding: 10px 14px;
+    font-size: 13px;
+    padding: 11px 14px;
     border-radius: 12px;
     cursor: pointer;
     min-width: 110px;
@@ -602,10 +626,10 @@
   }
 
   .stat-card {
-    background: var(--glass);
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 12px 10px;
+    padding: 12px 8px;
     text-align: center;
   }
 
@@ -628,12 +652,12 @@
     display: flex;
     gap: 6px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 6px;
     margin-bottom: 12px;
   }
 
   .ledger-item {
-    background: var(--glass);
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 13px 14px;
@@ -674,7 +698,7 @@
     align-items: center;
     margin-top: 10px;
     padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .empty-state {
@@ -688,7 +712,6 @@
 <body>
 <div class="app">
 
-  <!-- Header -->
   <div class="header">
     <div class="title-wrap">
       <h1>Life OS</h1>
@@ -697,7 +720,7 @@
     <div class="clock-pill" id="liveClock">--:--</div>
   </div>
 
-  <!-- Persistent Life Level Banner -->
+  <!-- Level Banner -->
   <div class="level-card">
     <div class="level-top">
       <div class="rank-badge">
@@ -715,14 +738,14 @@
     </div>
   </div>
 
-  <!-- Main 3-Tab Switcher -->
+  <!-- Main Tabs -->
   <div class="segmented">
-    <button class="seg-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
-    <button class="seg-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
-    <button class="seg-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
+    <button type="button" class="seg-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
+    <button type="button" class="seg-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
+    <button type="button" class="seg-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
   </div>
 
-  <!-- ==================== VIEW 1: ROUTINE ==================== -->
+  <!-- VIEW 1: ROUTINE -->
   <section id="viewRoutine" class="view active">
     <div class="card">
       <div class="progress-top">
@@ -733,11 +756,10 @@
         <div class="bar-fill" id="progressFill"></div>
       </div>
       <div class="controls-row">
-        <button class="chip-btn" id="workdayBtn" onclick="toggleWorkdayMode()">Workday Mode: OFF</button>
-        <button class="chip-btn accent-chip" onclick="toggleForm('habitForm')">+ Add Habit</button>
+        <button type="button" class="chip-btn" id="workdayBtn" onclick="toggleWorkdayMode()">Workday Mode: OFF</button>
+        <button type="button" class="chip-btn accent-chip" onclick="toggleForm('habitForm')">+ Add Habit</button>
       </div>
 
-      <!-- Add Habit Form -->
       <div class="form-box" id="habitForm">
         <div class="form-grid">
           <div class="field">
@@ -765,37 +787,36 @@
           <input type="checkbox" id="hEssential" checked>
           Keep active during Workday Mode
         </label>
-        <button class="primary-btn" onclick="addHabit()">Save Habit</button>
+        <button type="button" class="primary-btn" onclick="addHabit()">Save Habit</button>
       </div>
     </div>
 
     <div class="routine-list" id="routineList"></div>
   </section>
 
-  <!-- ==================== VIEW 2: RULES & QUIZ ==================== -->
+  <!-- VIEW 2: RULES & QUIZ -->
   <section id="viewQuiz" class="view">
     <div class="card quiz-header-card">
       <h2>Principles & Daily Check-in</h2>
       <p>Evaluate your discipline daily (+30 XP max per day).</p>
       <div class="quiz-mode-switch">
-        <button class="chip-btn active-mode" id="modeCheckin" onclick="setQuizMode('checkin')">Daily Check-in</button>
-        <button class="chip-btn" id="modeList" onclick="setQuizMode('list')">All Rules</button>
+        <button type="button" class="chip-btn active-mode" id="modeCheckin" onclick="setQuizMode('checkin')">Daily Check-in</button>
+        <button type="button" class="chip-btn" id="modeList" onclick="setQuizMode('list')">All Rules</button>
       </div>
     </div>
 
-    <!-- 3-Second Pause Tool -->
     <div class="card pause-tool">
       <div>
         <div style="font-size:14px; font-weight:700;">3-Second Pause Practice</div>
         <div style="font-size:12px; color:var(--muted);" id="pauseStatus">Pause 3 seconds before responding</div>
       </div>
-      <button class="pause-btn" id="pauseBtn" onclick="startPauseTimer()">Start 3s</button>
+      <button type="button" class="pause-btn" id="pauseBtn" onclick="startPauseTimer()">Start 3s</button>
     </div>
 
     <div class="card" id="quizCard"></div>
   </section>
 
-  <!-- ==================== VIEW 3: FINANCE LEDGER ==================== -->
+  <!-- VIEW 3: FINANCE LEDGER -->
   <section id="viewLedger" class="view">
     <div class="summary-grid">
       <div class="stat-card">
@@ -815,10 +836,9 @@
     <div class="card">
       <div class="progress-top" style="margin-bottom:0;">
         <span class="progress-label">Financial Records</span>
-        <button class="chip-btn accent-chip" onclick="toggleForm('ledgerForm')">+ Add Record</button>
+        <button type="button" class="chip-btn accent-chip" onclick="toggleForm('ledgerForm')">+ Add Record</button>
       </div>
 
-      <!-- Add Finance Entry Form -->
       <div class="form-box" id="ledgerForm">
         <div class="field">
           <label>Record Type</label>
@@ -847,3 +867,651 @@
               <option value="UPI">UPI</option>
               <option value="Cash">Cash</option>
               <option value="Bank">Bank Transfer</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input type="date" id="lDate" class="input">
+          </div>
+        </div>
+        <div class="field">
+          <label>Note / Purpose</label>
+          <input type="text" id="lNote" class="input" placeholder="Optional details">
+        </div>
+        <button type="button" class="primary-btn" onclick="addLedgerEntry()">Save Record</button>
+      </div>
+    </div>
+
+    <div class="filter-scroll" id="ledgerFilters"></div>
+    <div id="ledgerList"></div>
+  </section>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // ---------------- SAFE STORAGE ----------------
+  const PREFIX = "lifeos_v1_";
+  const memStore = {};
+  const todayKey = new Date().toISOString().slice(0, 10);
+
+  function loadData(key, fallback) {
+    try {
+      const raw = localStorage.getItem(PREFIX + key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return memStore[key] !== undefined ? memStore[key] : fallback;
+    }
+  }
+
+  function saveData(key, val) {
+    memStore[key] = val;
+    try {
+      localStorage.setItem(PREFIX + key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+  }
+
+  // ---------------- DEFAULT DATA ----------------
+  const defaultHabits = [
+    { id: 1, start: 5.0, end: 6.0, time: "05:00 - 06:00 AM", title: "Wake Up, 60 Push-ups & Stretching", desc: "Wake up at 5:00 AM sharp for 1 hour of bodyweight training and mobility.", tag: "Fitness", essential: true },
+    { id: 2, start: 6.0, end: 7.0, time: "06:00 - 07:00 AM", title: "Room Cleanup & Dishes", desc: "Organize living space and clean utensils.", tag: "Cleanliness", essential: true },
+    { id: 3, start: 7.0, end: 8.5, time: "07:00 - 08:30 AM", title: "Cooking & Breakfast", desc: "Prepare a fresh meal and eat calmly.", tag: "Meal", essential: true },
+    { id: 4, start: 8.5, end: 10.0, time: "08:30 - 10:00 AM", title: "English Practice", desc: "Focused vocabulary, grammar, and spoken fluency.", tag: "Skill", essential: false },
+    { id: 5, start: 10.0, end: 12.5, time: "10:00 AM - 12:30 PM", title: "Deep Study & Coding", desc: "Distraction-free learning and project execution.", tag: "Deep Work", essential: false },
+    { id: 6, start: 12.5, end: 13.5, time: "12:30 - 01:30 PM", title: "Lunch Break", desc: "Midday meal and short mental recharge.", tag: "Meal", essential: true },
+    { id: 7, start: 13.5, end: 14.5, time: "01:30 - 02:30 PM", title: "Afternoon Power Nap", desc: "1-hour rest after lunch to restore focus.", tag: "Rest", essential: false },
+    { id: 8, start: 14.5, end: 15.5, time: "02:30 - 03:30 PM", title: "Study Revision", desc: "1-hour structured revision of morning topics.", tag: "Revision", essential: false },
+    { id: 9, start: 15.5, end: 16.5, time: "03:30 - 04:30 PM", title: "Scheduled Entertainment", desc: "Watch a show for strictly 1 hour, then stop.", tag: "Break", essential: false },
+    { id: 10, start: 16.5, end: 18.0, time: "04:30 - 06:00 PM", title: "Evening Study Session", desc: "1 to 1.5 hours of coding practice or remaining coursework.", tag: "Study", essential: false },
+    { id: 11, start: 18.0, end: 18.5, time: "06:00 - 06:30 PM", title: "Call with Mother", desc: "Daily 6:00 PM family check-in call without fail.", tag: "Family", essential: true },
+    { id: 12, start: 18.5, end: 19.5, time: "06:30 - 07:30 PM", title: "Outdoor Walk & Self-Reflection", desc: "Walk outdoors and practice clear self-talk.", tag: "Mindset", essential: true },
+    { id: 13, start: 19.5, end: 21.0, time: "07:30 - 09:00 PM", title: "Dinner & Wind Down", desc: "Prepare dinner and eat without screens.", tag: "Meal", essential: true },
+    { id: 14, start: 21.0, end: 22.0, time: "09:00 - 10:00 PM", title: "Gaming Session", desc: "Fixed 1-hour gaming window. Stop sharply at 10:00 PM.", tag: "Gaming", essential: false },
+    { id: 15, start: 22.0, end: 23.0, time: "10:00 - 10:30 PM", title: "Phone Away & Sleep", desc: "Keep phone away from bed to ensure a 5:00 AM wake-up.", tag: "Sleep", essential: true }
+  ];
+
+  const defaultRules = [
+    { id: 1, category: "Speech Control", ruleText: "Avoid unnecessary chatter; speak concisely and with purpose.", question: "Did you avoid unnecessary chatter and speak with purpose today?" },
+    { id: 2, category: "Observation", ruleText: "Actively observe people's facial expressions and body language.", question: "Did you stay attentive and observe people's expressions today?" },
+    { id: 3, category: "Financial Discipline", ruleText: "Never spend money impulsively without careful thought.", question: "Did you avoid impulsive or unplanned spending today?" },
+    { id: 4, category: "Calm Response", ruleText: "Take a 3-second pause before answering anyone.", question: "Did you practice the 3-second pause before responding today?" },
+    { id: 5, category: "Family Priority", ruleText: "Call Mother every evening at 6:00 PM.", question: "Did you complete your 6:00 PM call with your mother today?" },
+    { id: 6, category: "Mental Clarity", ruleText: "Walk outdoors and reflect with yourself during free time.", question: "Did you take an outdoor walk and practice self-reflection today?" },
+    { id: 7, category: "Sleep Discipline", ruleText: "Keep your phone away before going to sleep.", question: "Are you keeping your phone away from bed before sleeping tonight?" }
+  ];
+
+  // ---------------- STATE ----------------
+  let habits = loadData("habits", defaultHabits);
+  let rules = loadData("rules", defaultRules);
+  let ledger = loadData("ledger", []);
+  let completedIds = loadData("completed_" + todayKey, []);
+  let quizRecord = loadData("quiz_" + todayKey, null);
+  let profile = loadData("profile", { xp: 0, streak: 0, lastStreakDate: null });
+
+  let workdayMode = false;
+  let quizMode = "checkin";
+  let qIndex = 0;
+  let tempQuizScore = 0;
+  let answeredCurrent = false;
+  let ledgerFilter = "all";
+  let pendingDeleteKey = null;
+
+  // ---------------- LEVEL SYSTEM ----------------
+  function getRankTitle(level) {
+    if (level <= 2) return "Novice";
+    if (level <= 5) return "Apprentice";
+    if (level <= 9) return "Practitioner";
+    if (level <= 14) return "Disciplined";
+    if (level <= 19) return "Strategist";
+    if (level <= 29) return "Executive";
+    return "Sovereign";
+  }
+
+  function calculateLevel(totalXp) {
+    let xp = Math.max(0, totalXp);
+    let level = 1;
+    let needed = 500;
+    while (xp >= needed) {
+      xp -= needed;
+      level++;
+      needed = 500 + (level - 1) * 250;
+    }
+    return { level, currentXp: xp, needed, pct: Math.round((xp / needed) * 100), rank: getRankTitle(level) };
+  }
+
+  function addXp(amount) {
+    profile.xp = Math.max(0, profile.xp + amount);
+    saveData("profile", profile);
+    renderLevel();
+  }
+
+  function checkDailyStreak() {
+    if (habits.length === 0) return;
+    const ratio = completedIds.length / habits.length;
+    if (ratio >= 0.7 && profile.lastStreakDate !== todayKey) {
+      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      profile.streak = (profile.lastStreakDate === yesterday) ? profile.streak + 1 : 1;
+      profile.lastStreakDate = todayKey;
+      profile.xp += 15;
+      saveData("profile", profile);
+      renderLevel();
+      showToast("Daily Streak +1 (+15 XP)");
+    }
+  }
+
+  function renderLevel() {
+    const info = calculateLevel(profile.xp);
+    document.getElementById("lvlBadge").textContent = "LVL " + info.level;
+    document.getElementById("rankName").textContent = info.rank;
+    document.getElementById("streakBadge").textContent = info.streak !== undefined ? info.streak : profile.streak + " Day Streak";
+    document.getElementById("xpFill").style.width = info.pct + "%";
+    document.getElementById("xpProgressText").textContent = info.currentXp + " / " + info.needed + " XP";
+    document.getElementById("totalXpText").textContent = "Total: " + profile.xp + " XP";
+  }
+
+  // ---------------- CLOCK & TABS ----------------
+  function updateClock() {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const ampm = h >= 12 ? "PM" : "AM";
+    const h12 = h % 12 || 12;
+    document.getElementById("liveClock").textContent =
+      String(h12).padStart(2, "0") + ":" + String(m).padStart(2, "0") + " " + ampm;
+    const opts = { weekday: "short", day: "numeric", month: "short" };
+    document.getElementById("dateText").textContent = now.toLocaleDateString("en-IN", opts) + " • Life OS";
+  }
+  updateClock();
+  setInterval(updateClock, 15000);
+
+  function switchTab(tab) {
+    pendingDeleteKey = null;
+    ["routine", "quiz", "ledger"].forEach(t => {
+      const cap = t.charAt(0).toUpperCase() + t.slice(1);
+      document.getElementById("tab" + cap).classList.toggle("active", t === tab);
+      document.getElementById("view" + cap).classList.toggle("active", t === tab);
+    });
+  }
+
+  function toggleForm(id) {
+    document.getElementById(id).classList.toggle("open");
+  }
+
+  function formatTimeRange(startStr, endStr) {
+    const fmt = (t) => {
+      const parts = t.split(":").map(Number);
+      const ap = parts[0] >= 12 ? "PM" : "AM";
+      const h12 = parts[0] % 12 || 12;
+      return String(h12).padStart(2, "0") + ":" + String(parts[1]).padStart(2, "0") + " " + ap;
+    };
+    return fmt(startStr) + " - " + fmt(endStr);
+  }
+
+  function timeToDecimal(t) {
+    const parts = t.split(":").map(Number);
+    return parts[0] + parts[1] / 60;
+  }
+
+  // ---------------- ROUTINE ----------------
+  function renderRoutine() {
+    const list = document.getElementById("routineList");
+    list.innerHTML = "";
+
+    const now = new Date();
+    const currentDec = now.getHours() + now.getMinutes() / 60;
+    const sorted = [...habits].sort((a, b) => a.start - b.start);
+    const visible = workdayMode ? sorted.filter(h => h.essential) : sorted;
+    const doneCount = visible.filter(h => completedIds.includes(h.id)).length;
+    const pct = visible.length ? Math.round((doneCount / visible.length) * 100) : 0;
+
+    document.getElementById("progressText").textContent = doneCount + " / " + visible.length + " Habits Complete";
+    document.getElementById("progressPct").textContent = pct + "%";
+    document.getElementById("progressFill").style.width = pct + "%";
+
+    if (visible.length === 0) {
+      list.innerHTML = '<div class="empty-state">No habits yet. Tap "+ Add Habit" to build your routine.</div>';
+      return;
+    }
+
+    sorted.forEach(task => {
+      const isDone = completedIds.includes(task.id);
+      const isNow = currentDec >= task.start && currentDec < task.end;
+      const hide = workdayMode && !task.essential;
+      const delKey = "habit_" + task.id;
+      const isConfirm = pendingDeleteKey === delKey;
+
+      const div = document.createElement("div");
+      div.className = "task-item" + (isDone ? " done" : "") + (isNow ? " current-slot" : "") + (hide ? " hidden-workday" : "");
+      div.onclick = () => toggleHabit(task.id);
+
+      div.innerHTML = `
+        <div class="check-circle">${isDone ? "✓" : ""}</div>
+        <div class="task-body">
+          <div class="task-meta">
+            <span class="time-badge">${task.time}</span>
+            <span class="tag-badge">${task.tag}</span>
+            ${isNow ? '<span class="now-badge">NOW</span>' : ''}
+          </div>
+          <div class="task-title">${task.title}</div>
+          <div class="task-desc">${task.desc}</div>
+        </div>
+        <button type="button" class="del-icon ${isConfirm ? 'confirming' : ''}" onclick="deleteHabit(event, ${task.id})">${isConfirm ? 'Sure?' : '×'}</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function toggleHabit(id) {
+    pendingDeleteKey = null;
+    if (completedIds.includes(id)) {
+      completedIds = completedIds.filter(x => x !== id);
+      addXp(-10);
+    } else {
+      completedIds.push(id);
+      addXp(10);
+      checkDailyStreak();
+    }
+    saveData("completed_" + todayKey, completedIds);
+    renderRoutine();
+  }
+
+  function addHabit() {
+    const startStr = document.getElementById("hStart").value;
+    const endStr = document.getElementById("hEnd").value;
+    const title = document.getElementById("hTitle").value.trim();
+    const desc = document.getElementById("hDesc").value.trim() || "Daily routine habit";
+    const tag = document.getElementById("hTag").value.trim() || "General";
+    const essential = document.getElementById("hEssential").checked;
+
+    if (!title || !startStr || !endStr) return showToast("Enter habit title and time");
+
+    habits.push({
+      id: Date.now(),
+      start: timeToDecimal(startStr),
+      end: timeToDecimal(endStr),
+      time: formatTimeRange(startStr, endStr),
+      title, desc, tag, essential
+    });
+    saveData("habits", habits);
+
+    document.getElementById("hTitle").value = "";
+    document.getElementById("hDesc").value = "";
+    document.getElementById("hTag").value = "";
+    toggleForm("habitForm");
+    showToast("Habit saved");
+    renderRoutine();
+  }
+
+  function deleteHabit(e, id) {
+    e.stopPropagation();
+    const key = "habit_" + id;
+    if (pendingDeleteKey !== key) {
+      pendingDeleteKey = key;
+      renderRoutine();
+      return;
+    }
+    pendingDeleteKey = null;
+    habits = habits.filter(h => h.id !== id);
+    completedIds = completedIds.filter(x => x !== id);
+    saveData("habits", habits);
+    saveData("completed_" + todayKey, completedIds);
+    showToast("Habit deleted");
+    renderRoutine();
+  }
+
+  function toggleWorkdayMode() {
+    workdayMode = !workdayMode;
+    const btn = document.getElementById("workdayBtn");
+    btn.textContent = workdayMode ? "Workday Mode: ON" : "Workday Mode: OFF";
+    btn.classList.toggle("active-mode", workdayMode);
+    renderRoutine();
+  }
+
+  // ---------------- RULES & QUIZ ----------------
+  function setQuizMode(mode) {
+    quizMode = mode;
+    qIndex = 0;
+    tempQuizScore = 0;
+    answeredCurrent = false;
+    pendingDeleteKey = null;
+    document.getElementById("modeCheckin").classList.toggle("active-mode", mode === "checkin");
+    document.getElementById("modeList").classList.toggle("active-mode", mode === "list");
+    renderQuiz();
+  }
+
+  function renderQuiz() {
+    const card = document.getElementById("quizCard");
+
+    if (quizMode === "list") {
+      let html = `
+        <div class="progress-top">
+          <span class="q-category" style="margin:0;">My Life Rules (${rules.length})</span>
+          <button type="button" class="chip-btn accent-chip" onclick="toggleForm('ruleForm')">+ Add Rule</button>
+        </div>
+        <div class="form-box" id="ruleForm">
+          <div class="field">
+            <label>Category</label>
+            <input type="text" id="rCat" class="input" placeholder="e.g., Focus, Mindset">
+          </div>
+          <div class="field">
+            <label>Rule Statement</label>
+            <input type="text" id="rText" class="input" placeholder="e.g., No social media before noon">
+          </div>
+          <div class="field">
+            <label>Daily Check-in Question</label>
+            <input type="text" id="rQues" class="input" placeholder="Optional custom question">
+          </div>
+          <button type="button" class="primary-btn" onclick="addRule()">Save Rule</button>
+        </div>
+        <div style="margin-top:8px;">
+      `;
+      if (rules.length === 0) {
+        html += '<div class="empty-state">No rules added yet.</div>';
+      } else {
+        rules.forEach((r, i) => {
+          const isConfirm = pendingDeleteKey === "rule_" + r.id;
+          html += `
+            <div class="rule-row">
+              <div>
+                <div style="font-size:11px; color:var(--accent); font-weight:700;">${String(i+1).padStart(2,"0")} • ${r.category}</div>
+                <div style="font-size:14px; margin-top:2px;">${r.ruleText}</div>
+              </div>
+              <button type="button" class="del-icon ${isConfirm ? 'confirming' : ''}" onclick="deleteRule(${r.id})">${isConfirm ? 'Sure?' : '×'}</button>
+            </div>
+          `;
+        });
+      }
+      html += "</div>";
+      card.innerHTML = html;
+      return;
+    }
+
+    if (rules.length === 0) {
+      card.innerHTML = '<div class="empty-state">Add at least one rule in "All Rules" to start your Daily Check-in.</div>';
+      return;
+    }
+
+    if (quizRecord) {
+      card.innerHTML = `
+        <div style="text-align:center;">
+          <div class="q-category">Today's Check-in Completed</div>
+          <div class="score-ring">
+            <span class="big">${quizRecord.pct}%</span>
+            <span class="small">+${quizRecord.xpEarned} XP</span>
+          </div>
+          <div class="q-text">Discipline Score Recorded</div>
+          <div class="q-sub">Your XP has been added. Come back tomorrow for your next daily check-in.</div>
+        </div>
+      `;
+      return;
+    }
+
+    if (qIndex >= rules.length) {
+      const maxPts = rules.length * 2;
+      const pct = Math.round((tempQuizScore / maxPts) * 100);
+      const xpEarned = Math.round((pct / 100) * 30);
+
+      quizRecord = { pct, xpEarned, date: todayKey };
+      saveData("quiz_" + todayKey, quizRecord);
+      addXp(xpEarned);
+      showToast("Check-in saved (+" + xpEarned + " XP)");
+      renderQuiz();
+      return;
+    }
+
+    const r = rules[qIndex];
+    let dots = "";
+    for (let i = 0; i < rules.length; i++) {
+      let cls = i < qIndex ? "answered" : i === qIndex ? "active" : "";
+      dots += `<div class="dot ${cls}"></div>`;
+    }
+
+    const opts = [
+      "Yes, followed completely",
+      "Partially followed",
+      "No, missed today"
+    ];
+
+    const optsHtml = opts.map((text, idx) =>
+      `<button type="button" class="opt-btn" id="opt_${idx}" onclick="selectCheckin(${idx})">${text}</button>`
+    ).join("");
+
+    card.innerHTML = `
+      <div class="dots-bar">${dots}</div>
+      <div class="q-category">${r.category} • ${qIndex + 1}/${rules.length}</div>
+      <div class="q-text">${r.question}</div>
+      <div class="q-sub">Principle: ${r.ruleText}</div>
+      <div class="options-wrap">${optsHtml}</div>
+      <div class="feedback-box" id="fbBox"></div>
+      <button type="button" class="primary-btn" id="nextBtn" style="display:none;" onclick="nextCheckin()">
+        ${qIndex === rules.length - 1 ? "Finish & Claim XP" : "Next Question →"}
+      </button>
+    `;
+  }
+
+  function selectCheckin(idx) {
+    if (answeredCurrent) return;
+    answeredCurrent = true;
+    const ptsMap = [2, 1, 0];
+    const clsMap = ["correct", "mid", "wrong"];
+    const fbMap = [
+      "Strong execution. Consistency builds character.",
+      "Fair effort. Tighten your focus tomorrow.",
+      "Acknowledge it honestly and reset stronger tomorrow."
+    ];
+
+    tempQuizScore += ptsMap[idx];
+    document.getElementById("opt_" + idx).classList.add(clsMap[idx]);
+    const fb = document.getElementById("fbBox");
+    fb.textContent = fbMap[idx];
+    fb.style.display = "block";
+    document.getElementById("nextBtn").style.display = "block";
+  }
+
+  function nextCheckin() {
+    qIndex++;
+    answeredCurrent = false;
+    renderQuiz();
+  }
+
+  function addRule() {
+    const category = document.getElementById("rCat").value.trim() || "Discipline";
+    const ruleText = document.getElementById("rText").value.trim();
+    const question = document.getElementById("rQues").value.trim() || ('Did you follow "' + ruleText + '" today?');
+    if (!ruleText) return showToast("Enter a rule statement");
+
+    rules.push({ id: Date.now(), category, ruleText, question });
+    saveData("rules", rules);
+    showToast("Rule added");
+    renderQuiz();
+  }
+
+  function deleteRule(id) {
+    const key = "rule_" + id;
+    if (pendingDeleteKey !== key) {
+      pendingDeleteKey = key;
+      renderQuiz();
+      return;
+    }
+    pendingDeleteKey = null;
+    rules = rules.filter(r => r.id !== id);
+    saveData("rules", rules);
+    showToast("Rule deleted");
+    renderQuiz();
+  }
+
+  // ---------------- 3-SECOND PAUSE ----------------
+  let pauseRunning = false;
+  function startPauseTimer() {
+    if (pauseRunning) return;
+    pauseRunning = true;
+    const btn = document.getElementById("pauseBtn");
+    const status = document.getElementById("pauseStatus");
+    let count = 3;
+    btn.textContent = "Hold... " + count;
+    status.textContent = "Breathe steadily and observe expressions...";
+
+    const timer = setInterval(() => {
+      count--;
+      if (count > 0) {
+        btn.textContent = "Hold... " + count;
+      } else {
+        clearInterval(timer);
+        btn.textContent = "Respond ✓";
+        status.textContent = "Speak calmly and concisely now.";
+        setTimeout(() => {
+          btn.textContent = "Start 3s";
+          status.textContent = "Pause 3 seconds before responding";
+          pauseRunning = false;
+        }, 2000);
+      }
+    }, 1000);
+  }
+
+  // ---------------- FINANCE LEDGER ----------------
+  const typeMeta = {
+    given: { label: "Given (Lent)", color: "c-green" },
+    taken: { label: "Taken (Borrowed)", color: "c-red" },
+    loan: { label: "Loan / EMI", color: "c-red" },
+    expense: { label: "Expense", color: "c-amber" },
+    income: { label: "Income", color: "c-green" }
+  };
+
+  function renderLedger() {
+    let toReceive = 0, toPay = 0, totalExp = 0;
+    ledger.forEach(item => {
+      const amt = Number(item.amount) || 0;
+      if (!item.settled && item.type === "given") toReceive += amt;
+      if (!item.settled && (item.type === "taken" || item.type === "loan")) toPay += amt;
+      if (item.type === "expense") totalExp += amt;
+    });
+
+    document.getElementById("sumReceive").textContent = "₹" + toReceive.toLocaleString("en-IN");
+    document.getElementById("sumPay").textContent = "₹" + toPay.toLocaleString("en-IN");
+    document.getElementById("sumExpense").textContent = "₹" + totalExp.toLocaleString("en-IN");
+
+    const filters = [
+      { id: "all", name: "All" },
+      { id: "given", name: "Given" },
+      { id: "taken", name: "Taken" },
+      { id: "loan", name: "Loans" },
+      { id: "expense", name: "Expenses" },
+      { id: "income", name: "Income" },
+      { id: "settled", name: "Settled" }
+    ];
+
+    document.getElementById("ledgerFilters").innerHTML = filters.map(f =>
+      `<button type="button" class="chip-btn ${ledgerFilter === f.id ? 'active-mode' : ''}" onclick="setLedgerFilter('${f.id}')">${f.name}</button>`
+    ).join("");
+
+    const listEl = document.getElementById("ledgerList");
+    const filtered = ledger.filter(item => {
+      if (ledgerFilter === "all") return true;
+      if (ledgerFilter === "settled") return item.settled;
+      return item.type === ledgerFilter;
+    });
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<div class="empty-state">No financial records found in this category.</div>';
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(item => {
+      const meta = typeMeta[item.type] || typeMeta.expense;
+      const canSettle = ["given", "taken", "loan"].includes(item.type);
+      const isConfirm = pendingDeleteKey === "ledger_" + item.id;
+      return `
+        <div class="ledger-item ${item.settled ? 'settled' : ''}">
+          <div class="ledger-top">
+            <div>
+              <div class="ledger-name">${item.person}</div>
+              <div class="task-meta" style="margin-top:4px;">
+                <span class="tag-badge">${meta.label}</span>
+                <span class="tag-badge">${item.mode}</span>
+                <span class="tag-badge">${item.date}</span>
+                ${item.settled ? '<span class="now-badge" style="background:var(--success);">SETTLED</span>' : ''}
+              </div>
+            </div>
+            <div class="ledger-amt ${meta.color}">₹${Number(item.amount).toLocaleString("en-IN")}</div>
+          </div>
+          ${item.note ? `<div class="ledger-sub">${item.note}</div>` : ''}
+          <div class="ledger-actions">
+            ${canSettle
+              ? `<button type="button" class="chip-btn" onclick="toggleSettled(${item.id})">${item.settled ? 'Mark Pending' : 'Mark Settled'}</button>`
+              : '<span style="font-size:11.5px; color:var(--muted);">Recorded</span>'
+            }
+            <button type="button" class="del-icon ${isConfirm ? 'confirming' : ''}" onclick="deleteLedger(${item.id})">${isConfirm ? 'Sure?' : '×'}</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function setLedgerFilter(f) {
+    ledgerFilter = f;
+    pendingDeleteKey = null;
+    renderLedger();
+  }
+
+  function addLedgerEntry() {
+    const type = document.getElementById("lType").value;
+    const person = document.getElementById("lPerson").value.trim();
+    const amount = parseFloat(document.getElementById("lAmount").value);
+    const mode = document.getElementById("lMode").value;
+    const date = document.getElementById("lDate").value || todayKey;
+    const note = document.getElementById("lNote").value.trim();
+
+    if (!person || isNaN(amount) || amount <= 0) {
+      return showToast("Enter valid name and amount");
+    }
+
+    ledger.unshift({ id: Date.now(), type, person, amount, mode, date, note, settled: false });
+    saveData("ledger", ledger);
+
+    document.getElementById("lPerson").value = "";
+    document.getElementById("lAmount").value = "";
+    document.getElementById("lNote").value = "";
+    toggleForm("ledgerForm");
+    showToast("Record saved");
+    renderLedger();
+  }
+
+  function toggleSettled(id) {
+    ledger = ledger.map(item => item.id === id ? { ...item, settled: !item.settled } : item);
+    saveData("ledger", ledger);
+    renderLedger();
+  }
+
+  function deleteLedger(id) {
+    const key = "ledger_" + id;
+    if (pendingDeleteKey !== key) {
+      pendingDeleteKey = key;
+      renderLedger();
+      return;
+    }
+    pendingDeleteKey = null;
+    ledger = ledger.filter(item => item.id !== id);
+    saveData("ledger", ledger);
+    showToast("Record deleted");
+    renderLedger();
+  }
+
+  // ---------------- INIT ----------------
+  document.getElementById("lDate").value = todayKey;
+  renderLevel();
+  renderRoutine();
+  renderQuiz();
+  renderLedger();
+</script>
+</body>
+</html>
