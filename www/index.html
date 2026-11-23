@@ -6,21 +6,29 @@
 <title>Life OS — Routine, Rules & Ledger</title>
 <style>
   :root {
-    --bg-1: #0b0f19;
-    --bg-2: #060911;
-    --card-bg: rgba(20, 27, 45, 0.88);
-    --card-bg-hover: rgba(30, 41, 66, 0.92);
-    --border: rgba(255, 255, 255, 0.13);
-    --text: #f5f7fa;
-    --muted: #9aa4b8;
+    --bg-base: #06070a;
+    --bg-dim: 0.45;
+    --card-color: #ffffff;
+    --card-alpha: 0.08;
+    --glass-blur: 24px;
+    --border-color: #ffffff;
+    --border-alpha: 0.16;
+    --radius: 26px;
+
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+
+    --btn-bg: transparent;
+    --btn-border: rgba(255, 255, 255, 0.22);
+    --btn-text: #ffffff;
+    --btn-active-bg: #ffffff;
+    --btn-active-text: #06070a;
+
     --accent: #38bdf8;
     --accent-2: #818cf8;
     --success: #34d399;
     --warn: #fbbf24;
     --danger: #f87171;
-    --radius: 20px;
-    --glass-blur: 14px;
-    --bg-dim: 0.25;
   }
 
   * {
@@ -32,16 +40,16 @@
 
   html, body {
     touch-action: manipulation;
-    background-color: var(--bg-1);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
     min-height: 100%;
     overflow-x: hidden;
   }
 
   body {
-    background: linear-gradient(160deg, #162033 0%, var(--bg-1) 45%, var(--bg-2) 100%);
-    padding: calc(env(safe-area-inset-top, 24px) + 26px) 14px calc(env(safe-area-inset-bottom, 20px) + 80px);
+    background: var(--bg-base);
+    padding: calc(env(safe-area-inset-top, 24px) + 22px) 14px calc(env(safe-area-inset-bottom, 20px) + 70px);
     line-height: 1.45;
     position: relative;
   }
@@ -50,6 +58,10 @@
     position: fixed;
     inset: 0;
     z-index: -2;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.08) 0%, transparent 45%),
+      radial-gradient(circle at 80% 85%, rgba(255, 255, 255, 0.06) 0%, transparent 45%),
+      var(--bg-base);
     background-size: cover;
     background-position: center;
     pointer-events: none;
@@ -80,9 +92,9 @@
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%) translateY(80px);
-    background: #1e293b;
-    border: 1px solid var(--accent);
-    color: #fff;
+    background: rgba(12, 14, 18, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--text-primary);
     padding: 10px 18px;
     border-radius: 999px;
     font-size: 13px;
@@ -91,7 +103,7 @@
     opacity: 0;
     pointer-events: none;
     transition: all 0.25s ease;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
     white-space: nowrap;
   }
   .toast.show {
@@ -99,13 +111,12 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Auth & Passcode Lock Overlay */
   .gate-overlay {
     position: fixed;
     inset: 0;
     z-index: 5000;
-    background: rgba(6, 9, 17, 0.96);
-    backdrop-filter: blur(18px);
+    background: rgba(5, 6, 9, 0.92);
+    backdrop-filter: blur(28px);
     display: none;
     align-items: center;
     justify-content: center;
@@ -117,8 +128,8 @@
   .gate-card {
     width: 100%;
     max-width: 400px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), #0d1017);
+    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     border-radius: var(--radius);
     padding: 20px;
   }
@@ -140,7 +151,7 @@
 
   .title-wrap p {
     font-size: 12.5px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-top: 2px;
   }
 
@@ -152,37 +163,37 @@
   }
 
   .clock-pill {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    border: 1px solid var(--btn-border);
     padding: 7px 12px;
     border-radius: 999px;
     font-size: 12.5px;
     font-weight: 600;
-    color: var(--accent);
+    color: var(--text-primary);
     white-space: nowrap;
   }
 
   .custom-toggle-btn {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
     padding: 7px 11px;
     border-radius: 999px;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
   }
 
   .custom-toggle-btn.active {
-    background: rgba(56, 189, 248, 0.22);
-    border-color: var(--accent);
-    color: var(--accent);
+    background: var(--btn-active-bg);
+    color: var(--btn-active-text);
+    border-color: var(--btn-active-bg);
   }
 
   .level-card {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(129, 140, 248, 0.18));
-    border: 1px solid rgba(129, 140, 248, 0.35);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     border-radius: var(--radius);
     padding: 14px 16px;
     margin-bottom: 16px;
@@ -203,8 +214,8 @@
   }
 
   .lvl-pill {
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #07111f;
+    background: var(--btn-active-bg);
+    color: var(--btn-active-text);
     font-size: 12px;
     font-weight: 800;
     padding: 3px 9px;
@@ -230,7 +241,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 11.5px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-top: 6px;
   }
 
@@ -238,8 +249,8 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     padding: 5px;
     border-radius: 16px;
     margin-bottom: 16px;
@@ -249,7 +260,7 @@
   .seg-btn {
     border: none;
     background: transparent;
-    color: var(--muted);
+    color: var(--text-secondary);
     font-size: 13px;
     font-weight: 600;
     padding: 11px 6px;
@@ -258,9 +269,8 @@
   }
 
   .seg-btn.active {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(129, 140, 248, 0.28));
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: var(--btn-active-bg);
+    color: var(--btn-active-text);
   }
 
   .view {
@@ -271,8 +281,8 @@
   }
 
   .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     border-radius: var(--radius);
     padding: 16px;
     margin-bottom: 14px;
@@ -300,7 +310,7 @@
   .bar-bg {
     width: 100%;
     height: 7px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     border-radius: 999px;
     overflow: hidden;
   }
@@ -314,7 +324,7 @@
   }
 
   .bar-fill.xp-fill {
-    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    background: var(--btn-active-bg);
   }
 
   .controls-row {
@@ -327,9 +337,9 @@
   }
 
   .chip-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
     font-size: 12px;
     font-weight: 600;
     padding: 8px 13px;
@@ -337,23 +347,17 @@
     cursor: pointer;
   }
 
-  .chip-btn.active-mode {
-    background: rgba(251, 191, 36, 0.2);
-    border-color: rgba(251, 191, 36, 0.55);
-    color: var(--warn);
-  }
-
-  .chip-btn.accent-chip {
-    background: rgba(56, 189, 248, 0.2);
-    border-color: rgba(56, 189, 248, 0.5);
-    color: var(--accent);
+  .chip-btn.active-mode, .chip-btn.accent-chip {
+    background: var(--btn-active-bg);
+    color: var(--btn-active-text);
+    border-color: var(--btn-active-bg);
   }
 
   .form-box {
     display: none;
     margin-top: 14px;
     padding-top: 14px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
   .form-box.open {
     display: block;
@@ -373,24 +377,25 @@
   .field label {
     display: block;
     font-size: 11.5px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-bottom: 4px;
     font-weight: 600;
   }
 
   .input, select {
     width: 100%;
-    background: #0b101d;
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--btn-border);
+    color: var(--text-primary);
     padding: 11px 12px;
     border-radius: 12px;
     font-size: 14px;
     outline: none;
   }
 
-  .input:focus, select:focus {
-    border-color: var(--accent);
+  select option {
+    background: #10131a;
+    color: #ffffff;
   }
 
   .check-row {
@@ -398,7 +403,7 @@
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-bottom: 12px;
   }
 
@@ -412,8 +417,8 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     border-radius: 18px;
     padding: 14px;
     cursor: pointer;
@@ -428,12 +433,11 @@
 
   .task-item.done .task-title {
     text-decoration: line-through;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .task-item.current-slot {
-    border-color: rgba(56, 189, 248, 0.7);
-    background: rgba(24, 45, 74, 0.92);
+    border-color: var(--btn-active-bg);
   }
 
   .task-item.hidden-workday {
@@ -445,7 +449,7 @@
     height: 26px;
     min-width: 26px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.35);
+    border: 2px solid var(--btn-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -476,8 +480,8 @@
   .time-badge {
     font-size: 11px;
     font-weight: 700;
-    color: var(--accent);
-    background: rgba(56, 189, 248, 0.16);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.12);
     padding: 3px 8px;
     border-radius: 8px;
   }
@@ -485,7 +489,7 @@
   .tag-badge {
     font-size: 10.5px;
     font-weight: 600;
-    color: var(--muted);
+    color: var(--text-secondary);
     background: rgba(255, 255, 255, 0.08);
     padding: 3px 7px;
     border-radius: 8px;
@@ -494,8 +498,8 @@
   .now-badge {
     font-size: 10px;
     font-weight: 700;
-    color: #0b0f19;
-    background: var(--accent);
+    color: var(--btn-active-text);
+    background: var(--btn-active-bg);
     padding: 2px 7px;
     border-radius: 8px;
   }
@@ -507,7 +511,7 @@
 
   .task-desc {
     font-size: 12px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-top: 3px;
   }
 
@@ -542,7 +546,7 @@
 
   .quiz-header-card p {
     font-size: 12.5px;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .quiz-mode-switch {
@@ -566,7 +570,7 @@
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.14);
   }
-  .dot.active { background: var(--accent); }
+  .dot.active { background: var(--btn-active-bg); }
   .dot.answered { background: var(--success); }
 
   .q-category {
@@ -575,8 +579,8 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: var(--accent-2);
-    background: rgba(129, 140, 248, 0.18);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.12);
     padding: 4px 10px;
     border-radius: 999px;
     margin-bottom: 10px;
@@ -590,7 +594,7 @@
 
   .q-sub {
     font-size: 12.5px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-bottom: 16px;
   }
 
@@ -603,8 +607,8 @@
   .opt-btn {
     text-align: left;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border);
-    color: var(--text);
+    border: 1px solid var(--btn-border);
+    color: var(--text-primary);
     padding: 14px;
     border-radius: 14px;
     font-size: 14px;
@@ -620,23 +624,36 @@
     margin-top: 12px;
     padding: 11px 13px;
     border-radius: 13px;
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--btn-border);
     font-size: 12.5px;
-    color: #e0f2fe;
+    color: var(--text-primary);
     display: none;
   }
 
   .primary-btn {
     width: 100%;
-    margin-top: 14px;
+    margin-top: 10px;
     padding: 13px;
-    border: none;
+    border: 1px solid var(--btn-active-bg);
     border-radius: 14px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #07111f;
+    background: var(--btn-active-bg);
+    color: var(--btn-active-text);
     font-size: 14.5px;
     font-weight: 700;
+    cursor: pointer;
+  }
+
+  .secondary-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid var(--btn-border);
+    border-radius: 14px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
   }
 
@@ -649,11 +666,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(56, 189, 248, 0.12);
+    background: rgba(255, 255, 255, 0.08);
     border: 4px solid var(--success);
   }
   .score-ring .big { font-size: 26px; font-weight: 800; }
-  .score-ring .small { font-size: 11px; color: var(--muted); }
+  .score-ring .small { font-size: 11px; color: var(--text-secondary); }
 
   .rule-row {
     display: flex;
@@ -673,9 +690,9 @@
   }
 
   .pause-btn {
-    background: rgba(129, 140, 248, 0.25);
-    border: 1px solid rgba(129, 140, 248, 0.55);
-    color: #fff;
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
     font-weight: 700;
     font-size: 13px;
     padding: 11px 14px;
@@ -692,8 +709,8 @@
   }
 
   .stat-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     border-radius: 16px;
     padding: 12px 8px;
     text-align: center;
@@ -702,7 +719,7 @@
 
   .stat-label {
     font-size: 11px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-bottom: 4px;
   }
 
@@ -724,8 +741,8 @@
   }
 
   .ledger-item {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--card-color) calc(var(--card-alpha) * 100%), transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) calc(var(--border-alpha) * 100%), transparent);
     border-radius: 16px;
     padding: 13px 14px;
     margin-bottom: 10px;
@@ -756,7 +773,7 @@
 
   .ledger-sub {
     font-size: 12px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-top: 4px;
   }
 
@@ -772,7 +789,7 @@
   .empty-state {
     text-align: center;
     padding: 26px 14px;
-    color: var(--muted);
+    color: var(--text-secondary);
     font-size: 13px;
   }
 
@@ -781,8 +798,8 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.7px;
-    color: var(--muted);
-    margin: 12px 0 6px;
+    color: var(--text-secondary);
+    margin: 14px 0 6px;
   }
   .folder-grid {
     display: grid;
@@ -797,7 +814,7 @@
     padding: 8px 12px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border);
+    border: 1px solid var(--btn-border);
     margin-bottom: 6px;
     font-size: 13px;
   }
@@ -812,18 +829,18 @@
     padding: 9px 12px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border);
+    border: 1px solid var(--btn-border);
     margin-bottom: 6px;
   }
   .slider-top {
     display: flex;
     justify-content: space-between;
     font-size: 12px;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-bottom: 5px;
   }
   .slider-top span:last-child {
-    color: var(--text);
+    color: var(--text-primary);
     font-weight: 700;
   }
   .slider-row input[type="range"] {
@@ -831,11 +848,11 @@
   }
   .code-area {
     width: 100%;
-    height: 105px;
-    background: #070b14;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: #e2e8f0;
+    height: 110px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid var(--btn-border);
+    border-radius: 14px;
+    color: #f8fafc;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 12px;
     padding: 10px;
@@ -854,7 +871,7 @@
 <div id="passLockGate" class="gate-overlay">
   <div class="gate-card">
     <h2 style="font-size:18px; margin-bottom:6px;">App Password Lock</h2>
-    <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Enter app passcode to unlock Life OS (Default: 1234).</p>
+    <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px;">Enter passcode to unlock Life OS (Default: 1234).</p>
     <div class="field">
       <label>Passcode</label>
       <input type="password" id="unlockPassInput" class="input" placeholder="Enter passcode">
@@ -863,11 +880,11 @@
   </div>
 </div>
 
-<!-- LOGIN GATE -->
+<!-- LOGIN & SIGN UP GATE -->
 <div id="loginGate" class="gate-overlay">
   <div class="gate-card">
-    <h2 style="font-size:18px; margin-bottom:6px;">Life OS Login</h2>
-    <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Sign in with your user name and password.</p>
+    <h2 style="font-size:18px; margin-bottom:6px;">Account — Sign In / Sign Up</h2>
+    <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px;">Create a new account or sign in with your user/email.</p>
     <div class="field">
       <label>User Name / Email</label>
       <input type="text" id="loginUserInput" class="input" placeholder="e.g. rehan">
@@ -876,7 +893,9 @@
       <label>Password</label>
       <input type="password" id="loginPassInput" class="input" placeholder="Enter password">
     </div>
-    <button type="button" class="primary-btn" onclick="submitLogin()">Login</button>
+    <button type="button" class="primary-btn" onclick="submitLogin()">Sign In</button>
+    <button type="button" class="secondary-btn" onclick="submitSignUp()">Sign Up</button>
+    <button type="button" class="secondary-btn" onclick="closeLoginGate()">Cancel</button>
   </div>
 </div>
 
@@ -895,62 +914,25 @@
     </div>
   </div>
 
-  <!-- Theme, Password & Live Code Customize Card -->
-  <div class="card" id="customizePanel" style="display:none;">
-    <div class="progress-top" style="margin-bottom:4px;">
-      <span class="progress-label">Theme, Password & Code Customize</span>
-      <button type="button" class="chip-btn" onclick="toggleCustomize()">Close</button>
-    </div>
+  <!-- BOTTOM TOGGLE BAR FOR OPTIONS & SETTINGS -->
+  <div class="segmented" style="margin-bottom:12px;">
+    <button type="button" class="seg-btn active" id="optToggleApp" onclick="switchTopOption('app')">App</button>
+    <button type="button" class="seg-btn" id="optToggleTheme" onclick="switchTopOption('theme')">Theme</button>
+    <button type="button" class="seg-btn" id="optToggleCode" onclick="switchTopOption('code')">Code</button>
+  </div>
 
-    <div class="cust-section">App Passcode & Login</div>
-    <div class="field">
-      <label>Change App Passcode</label>
-      <input type="text" id="newPasscodeInput" class="input" placeholder="New passcode (min 3 chars)">
-    </div>
-    <div class="controls-row" style="margin-top:4px; margin-bottom:10px;">
-      <button type="button" class="chip-btn accent-chip" onclick="saveNewPasscode()">Save Passcode</button>
-      <button type="button" class="chip-btn" onclick="logoutUser()">Logout</button>
-    </div>
-
-    <div class="cust-section">Theme Presets</div>
-    <div class="folder-grid" id="themePresetGrid"></div>
-
-    <div class="cust-section">Colors</div>
-    <div class="color-row"><span>Accent Color</span><input type="color" id="cAccent" value="#38bdf8" oninput="setThemeColor('accent', this.value)"></div>
-    <div class="color-row"><span>Secondary Accent</span><input type="color" id="cAccent2" value="#818cf8" oninput="setThemeColor('accent2', this.value)"></div>
-    <div class="color-row"><span>Background Base</span><input type="color" id="cBg1" value="#0b0f19" oninput="setThemeColor('bg1', this.value)"></div>
-    <div class="color-row"><span>Text Color</span><input type="color" id="cText" value="#f5f7fa" oninput="setThemeColor('text', this.value)"></div>
-
-    <div class="cust-section">Glass, Radius & Wallpaper</div>
-    <div class="controls-row" style="margin-top:4px; margin-bottom:8px;">
-      <button type="button" class="chip-btn" onclick="document.getElementById('wpFileInput').click()">Set Wallpaper</button>
-      <button type="button" class="chip-btn" onclick="clearLifeWallpaper()">Clear Wallpaper</button>
-    </div>
-    <input type="file" id="wpFileInput" accept="image/*" style="display:none;" onchange="setLifeWallpaper(event)">
-
-    <div class="slider-row">
-      <div class="slider-top"><span>Glass Blur</span><span id="vBlur">14px</span></div>
-      <input type="range" id="sBlur" min="0" max="36" value="14" oninput="updateThemeSliders()">
-    </div>
-    <div class="slider-row">
-      <div class="slider-top"><span>Corner Radius</span><span id="vRadius">20px</span></div>
-      <input type="range" id="sRadius" min="10" max="32" value="20" oninput="updateThemeSliders()">
-    </div>
-    <div class="slider-row">
-      <div class="slider-top"><span>Wallpaper Dim</span><span id="vDim">25%</span></div>
-      <input type="range" id="sDim" min="0" max="80" value="25" oninput="updateThemeSliders()">
-    </div>
-
-    <div class="controls-row" style="margin-top:8px;">
-      <button type="button" class="chip-btn accent-chip" onclick="saveThemePreset()">Save Custom Theme</button>
-      <button type="button" class="chip-btn" onclick="resetThemePreset()">Reset Default</button>
+  <!-- SEPARATE CODE EDITOR SECTION -->
+  <div class="card" id="codeSectionCard" style="display:none;">
+    <div class="progress-top" style="margin-bottom:6px;">
+      <span class="progress-label">Code Editor (CSS & JS)</span>
+      <button type="button" class="chip-btn" onclick="switchTopOption('app')">Back</button>
     </div>
 
     <div class="cust-section">Custom CSS</div>
-    <textarea id="liveCssCode" class="code-area" placeholder="/* Write CSS here */" spellcheck="false"></textarea>
+    <textarea id="liveCssCode" class="code-area" placeholder="/* Write custom CSS here */" spellcheck="false"></textarea>
 
     <div class="cust-section">Custom JS</div>
-    <textarea id="liveJsCode" class="code-area" placeholder="// Write JavaScript here" spellcheck="false"></textarea>
+    <textarea id="liveJsCode" class="code-area" placeholder="// Write custom JS here" spellcheck="false"></textarea>
 
     <div class="controls-row" style="margin-top:4px;">
       <button type="button" class="chip-btn accent-chip" onclick="applyLiveCode()">Apply Code</button>
@@ -958,171 +940,232 @@
     </div>
   </div>
 
-  <!-- Level Banner -->
-  <div class="level-card">
-    <div class="level-top">
-      <div class="rank-badge">
-        <span class="lvl-pill" id="lvlBadge">LVL 1</span>
-        <span class="rank-name" id="rankName">Novice</span>
-      </div>
-      <span class="streak-pill" id="streakBadge">0 Day Streak</span>
+  <!-- THEME & SETTINGS CUSTOMIZE PANEL -->
+  <div class="card" id="customizePanel" style="display:none;">
+    <div class="progress-top" style="margin-bottom:4px;">
+      <span class="progress-label">Theme & Settings</span>
+      <button type="button" class="chip-btn" onclick="switchTopOption('app')">Close</button>
     </div>
-    <div class="bar-bg">
-      <div class="bar-fill xp-fill" id="xpFill"></div>
+
+    <div class="cust-section">Account & App Passcode</div>
+    <div class="field">
+      <label>Change App Passcode</label>
+      <input type="text" id="newPasscodeInput" class="input" placeholder="New passcode (min 3 chars)">
     </div>
-    <div class="xp-meta">
-      <span id="xpProgressText">0 / 500 XP</span>
-      <span id="totalXpText">Total: 0 XP</span>
+    <div class="controls-row" style="margin-top:4px; margin-bottom:10px;">
+      <button type="button" class="chip-btn accent-chip" onclick="saveNewPasscode()">Save Passcode</button>
+      <button type="button" class="chip-btn" onclick="openLoginGate()">Sign In / Sign Up</button>
+      <button type="button" class="chip-btn" onclick="logoutUser()">Logout</button>
+    </div>
+
+    <div class="cust-section">Theme Style Presets</div>
+    <div class="folder-grid" id="themePresetGrid"></div>
+
+    <div class="cust-section">Colors</div>
+    <div class="color-row"><span>Base Background</span><input type="color" id="cBgBase" value="#06070a" oninput="setThemeColor('bgBase', this.value)"></div>
+    <div class="color-row"><span>Card Tint</span><input type="color" id="cCardColor" value="#ffffff" oninput="setThemeColor('cardColor', this.value)"></div>
+    <div class="color-row"><span>Primary Text</span><input type="color" id="cTextPrimary" value="#ffffff" oninput="setThemeColor('textPrimary', this.value)"></div>
+    <div class="color-row"><span>Active Button Fill</span><input type="color" id="cBtnActiveBg" value="#ffffff" oninput="setThemeColor('btnActiveBg', this.value)"></div>
+    <div class="color-row"><span>Active Button Text</span><input type="color" id="cBtnActiveText" value="#06070a" oninput="setThemeColor('btnActiveText', this.value)"></div>
+
+    <div class="cust-section">Glass, Radius & Wallpaper</div>
+    <div class="controls-row" style="margin-top:4px; margin-bottom:8px;">
+      <button type="button" class="chip-btn accent-chip" onclick="document.getElementById('wpFileInput').click()">Set Wallpaper</button>
+      <button type="button" class="chip-btn" onclick="clearLifeWallpaper()">Clear Wallpaper</button>
+    </div>
+    <input type="file" id="wpFileInput" accept="image/*" style="display:none;" onchange="setLifeWallpaper(event)">
+
+    <div class="slider-row">
+      <div class="slider-top"><span>Glass Transparency</span><span id="vAlpha">8%</span></div>
+      <input type="range" id="sAlpha" min="0" max="45" value="8" oninput="updateThemeSliders()">
+    </div>
+    <div class="slider-row">
+      <div class="slider-top"><span>Glass Blur</span><span id="vBlur">24px</span></div>
+      <input type="range" id="sBlur" min="0" max="45" value="24" oninput="updateThemeSliders()">
+    </div>
+    <div class="slider-row">
+      <div class="slider-top"><span>Corner Radius</span><span id="vRadius">26px</span></div>
+      <input type="range" id="sRadius" min="8" max="34" value="26" oninput="updateThemeSliders()">
+    </div>
+    <div class="slider-row">
+      <div class="slider-top"><span>Wallpaper Dim</span><span id="vDim">45%</span></div>
+      <input type="range" id="sDim" min="0" max="85" value="45" oninput="updateThemeSliders()">
+    </div>
+
+    <div class="controls-row" style="margin-top:8px;">
+      <button type="button" class="chip-btn accent-chip" onclick="saveThemePreset()">Save Style</button>
+      <button type="button" class="chip-btn" onclick="resetThemePreset()">Reset Default</button>
     </div>
   </div>
 
-  <!-- Main Tabs -->
-  <div class="segmented">
-    <button type="button" class="seg-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
-    <button type="button" class="seg-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
-    <button type="button" class="seg-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
-  </div>
-
-  <!-- VIEW 1: ROUTINE -->
-  <section id="viewRoutine" class="view active">
-    <div class="card">
-      <div class="progress-top">
-        <span class="progress-label" id="progressText">0 / 0 Habits Complete</span>
-        <span class="progress-pct" id="progressPct">0%</span>
+  <!-- MAIN LIFE OS CONTENT WRAPPER -->
+  <div id="mainLifeOsContent">
+    <!-- Level Banner -->
+    <div class="level-card">
+      <div class="level-top">
+        <div class="rank-badge">
+          <span class="lvl-pill" id="lvlBadge">LVL 1</span>
+          <span class="rank-name" id="rankName">Novice</span>
+        </div>
+        <span class="streak-pill" id="streakBadge">0 Day Streak</span>
       </div>
       <div class="bar-bg">
-        <div class="bar-fill" id="progressFill"></div>
+        <div class="bar-fill xp-fill" id="xpFill"></div>
       </div>
-      <div class="controls-row">
-        <button type="button" class="chip-btn" id="workdayBtn" onclick="toggleWorkdayMode()">Workday Mode: OFF</button>
-        <button type="button" class="chip-btn accent-chip" onclick="toggleForm('habitForm')">+ Add Habit</button>
-      </div>
-
-      <div class="form-box" id="habitForm">
-        <div class="form-grid">
-          <div class="field">
-            <label>Start Time (24h)</label>
-            <input type="time" id="hStart" class="input" value="07:00">
-          </div>
-          <div class="field">
-            <label>End Time (24h)</label>
-            <input type="time" id="hEnd" class="input" value="08:00">
-          </div>
-        </div>
-        <div class="field">
-          <label>Habit Title</label>
-          <input type="text" id="hTitle" class="input" placeholder="e.g., Reading Technical Books">
-        </div>
-        <div class="field">
-          <label>Description</label>
-          <input type="text" id="hDesc" class="input" placeholder="Short action note">
-        </div>
-        <div class="field">
-          <label>Category Tag</label>
-          <input type="text" id="hTag" class="input" placeholder="e.g., Fitness, Study, Skill">
-        </div>
-        <label class="check-row">
-          <input type="checkbox" id="hEssential" checked>
-          Keep active during Workday Mode
-        </label>
-        <button type="button" class="primary-btn" onclick="addHabit()">Save Habit</button>
+      <div class="xp-meta">
+        <span id="xpProgressText">0 / 500 XP</span>
+        <span id="totalXpText">Total: 0 XP</span>
       </div>
     </div>
 
-    <div class="routine-list" id="routineList"></div>
-  </section>
-
-  <!-- VIEW 2: RULES & QUIZ -->
-  <section id="viewQuiz" class="view">
-    <div class="card quiz-header-card">
-      <h2>Principles & Daily Check-in</h2>
-      <p>Evaluate your discipline daily (+30 XP max per day).</p>
-      <div class="quiz-mode-switch">
-        <button type="button" class="chip-btn active-mode" id="modeCheckin" onclick="setQuizMode('checkin')">Daily Check-in</button>
-        <button type="button" class="chip-btn" id="modeList" onclick="setQuizMode('list')">All Rules</button>
-      </div>
+    <!-- Main Tabs -->
+    <div class="segmented">
+      <button type="button" class="seg-btn active" id="tabRoutine" onclick="switchTab('routine')">Routine</button>
+      <button type="button" class="seg-btn" id="tabQuiz" onclick="switchTab('quiz')">Rules & Quiz</button>
+      <button type="button" class="seg-btn" id="tabLedger" onclick="switchTab('ledger')">Ledger</button>
     </div>
 
-    <div class="card pause-tool">
-      <div>
-        <div style="font-size:14px; font-weight:700;">3-Second Pause Practice</div>
-        <div style="font-size:12px; color:var(--muted);" id="pauseStatus">Pause 3 seconds before responding</div>
-      </div>
-      <button type="button" class="pause-btn" id="pauseBtn" onclick="startPauseTimer()">Start 3s</button>
-    </div>
-
-    <div class="card" id="quizCard"></div>
-  </section>
-
-  <!-- VIEW 3: FINANCE LEDGER -->
-  <section id="viewLedger" class="view">
-    <div class="summary-grid">
-      <div class="stat-card">
-        <div class="stat-label">To Receive</div>
-        <div class="stat-val c-green" id="sumReceive">₹0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">To Pay / Loans</div>
-        <div class="stat-val c-red" id="sumPay">₹0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Expenses</div>
-        <div class="stat-val c-amber" id="sumExpense">₹0</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="progress-top" style="margin-bottom:0;">
-        <span class="progress-label">Financial Records</span>
-        <button type="button" class="chip-btn accent-chip" onclick="toggleForm('ledgerForm')">+ Add Record</button>
-      </div>
-
-      <div class="form-box" id="ledgerForm">
-        <div class="field">
-          <label>Record Type</label>
-          <select id="lType">
-            <option value="given">Money Given (Lent)</option>
-            <option value="taken">Money Taken (Borrowed)</option>
-            <option value="loan">Loan / EMI</option>
-            <option value="expense">Personal Expense</option>
-            <option value="income">Income / Received</option>
-          </select>
+    <!-- VIEW 1: ROUTINE -->
+    <section id="viewRoutine" class="view active">
+      <div class="card">
+        <div class="progress-top">
+          <span class="progress-label" id="progressText">0 / 0 Habits Complete</span>
+          <span class="progress-pct" id="progressPct">0%</span>
         </div>
-        <div class="form-grid">
-          <div class="field">
-            <label>Person / Title</label>
-            <input type="text" id="lPerson" class="input" placeholder="Name or item">
+        <div class="bar-bg">
+          <div class="bar-fill" id="progressFill"></div>
+        </div>
+        <div class="controls-row">
+          <button type="button" class="chip-btn" id="workdayBtn" onclick="toggleWorkdayMode()">Workday Mode: OFF</button>
+          <button type="button" class="chip-btn accent-chip" onclick="toggleForm('habitForm')">+ Add Habit</button>
+        </div>
+
+        <div class="form-box" id="habitForm">
+          <div class="form-grid">
+            <div class="field">
+              <label>Start Time (24h)</label>
+              <input type="time" id="hStart" class="input" value="07:00">
+            </div>
+            <div class="field">
+              <label>End Time (24h)</label>
+              <input type="time" id="hEnd" class="input" value="08:00">
+            </div>
           </div>
           <div class="field">
-            <label>Amount (₹)</label>
-            <input type="number" id="lAmount" class="input" placeholder="0">
+            <label>Habit Title</label>
+            <input type="text" id="hTitle" class="input" placeholder="e.g., Reading Technical Books">
           </div>
-        </div>
-        <div class="form-grid">
           <div class="field">
-            <label>Payment Mode</label>
-            <select id="lMode">
-              <option value="UPI">UPI</option>
-              <option value="Cash">Cash</option>
-              <option value="Bank">Bank Transfer</option>
+            <label>Description</label>
+            <input type="text" id="hDesc" class="input" placeholder="Short action note">
+          </div>
+          <div class="field">
+            <label>Category Tag</label>
+            <input type="text" id="hTag" class="input" placeholder="e.g., Fitness, Study, Skill">
+          </div>
+          <label class="check-row">
+            <input type="checkbox" id="hEssential" checked>
+            Keep active during Workday Mode
+          </label>
+          <button type="button" class="primary-btn" onclick="addHabit()">Save Habit</button>
+        </div>
+      </div>
+
+      <div class="routine-list" id="routineList"></div>
+    </section>
+
+    <!-- VIEW 2: RULES & QUIZ -->
+    <section id="viewQuiz" class="view">
+      <div class="card quiz-header-card">
+        <h2>Principles & Daily Check-in</h2>
+        <p>Evaluate your discipline daily (+30 XP max per day).</p>
+        <div class="quiz-mode-switch">
+          <button type="button" class="chip-btn active-mode" id="modeCheckin" onclick="setQuizMode('checkin')">Daily Check-in</button>
+          <button type="button" class="chip-btn" id="modeList" onclick="setQuizMode('list')">All Rules</button>
+        </div>
+      </div>
+
+      <div class="card pause-tool">
+        <div>
+          <div style="font-size:14px; font-weight:700;">3-Second Pause Practice</div>
+          <div style="font-size:12px; color:var(--text-secondary);" id="pauseStatus">Pause 3 seconds before responding</div>
+        </div>
+        <button type="button" class="pause-btn" id="pauseBtn" onclick="startPauseTimer()">Start 3s</button>
+      </div>
+
+      <div class="card" id="quizCard"></div>
+    </section>
+
+    <!-- VIEW 3: FINANCE LEDGER -->
+    <section id="viewLedger" class="view">
+      <div class="summary-grid">
+        <div class="stat-card">
+          <div class="stat-label">To Receive</div>
+          <div class="stat-val c-green" id="sumReceive">₹0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">To Pay / Loans</div>
+          <div class="stat-val c-red" id="sumPay">₹0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Expenses</div>
+          <div class="stat-val c-amber" id="sumExpense">₹0</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="progress-top" style="margin-bottom:0;">
+          <span class="progress-label">Financial Records</span>
+          <button type="button" class="chip-btn accent-chip" onclick="toggleForm('ledgerForm')">+ Add Record</button>
+        </div>
+
+        <div class="form-box" id="ledgerForm">
+          <div class="field">
+            <label>Record Type</label>
+            <select id="lType">
+              <option value="given">Money Given (Lent)</option>
+              <option value="taken">Money Taken (Borrowed)</option>
+              <option value="loan">Loan / EMI</option>
+              <option value="expense">Personal Expense</option>
+              <option value="income">Income / Received</option>
             </select>
           </div>
-          <div class="field">
-            <label>Date</label>
-            <input type="date" id="lDate" class="input">
+          <div class="form-grid">
+            <div class="field">
+              <label>Person / Title</label>
+              <input type="text" id="lPerson" class="input" placeholder="Name or item">
+            </div>
+            <div class="field">
+              <label>Amount (₹)</label>
+              <input type="number" id="lAmount" class="input" placeholder="0">
+            </div>
           </div>
+          <div class="form-grid">
+            <div class="field">
+              <label>Payment Mode</label>
+              <select id="lMode">
+                <option value="UPI">UPI</option>
+                <option value="Cash">Cash</option>
+                <option value="Bank">Bank Transfer</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Date</label>
+              <input type="date" id="lDate" class="input">
+            </div>
+          </div>
+          <div class="field">
+            <label>Note / Purpose</label>
+            <input type="text" id="lNote" class="input" placeholder="Optional details">
+          </div>
+          <button type="button" class="primary-btn" onclick="addLedgerEntry()">Save Record</button>
         </div>
-        <div class="field">
-          <label>Note / Purpose</label>
-          <input type="text" id="lNote" class="input" placeholder="Optional details">
-        </div>
-        <button type="button" class="primary-btn" onclick="addLedgerEntry()">Save Record</button>
       </div>
-    </div>
 
-    <div class="filter-scroll" id="ledgerFilters"></div>
-    <div id="ledgerList"></div>
-  </section>
+      <div class="filter-scroll" id="ledgerFilters"></div>
+      <div id="ledgerList"></div>
+    </section>
+  </div>
 
 </div>
 
@@ -1158,9 +1201,26 @@
     toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
   }
 
-  // ---------------- PASSCODE & LOGIN ----------------
+  // ---------------- TOP TOGGLE (APP / THEME / CODE) ----------------
+  function switchTopOption(mode) {
+    document.getElementById("optToggleApp").classList.toggle("active", mode === "app");
+    document.getElementById("optToggleTheme").classList.toggle("active", mode === "theme");
+    document.getElementById("optToggleCode").classList.toggle("active", mode === "code");
+
+    document.getElementById("customizePanel").style.display = mode === "theme" ? "block" : "none";
+    document.getElementById("codeSectionCard").style.display = mode === "code" ? "block" : "none";
+    document.getElementById("customizeBtn").classList.toggle("active", mode === "theme");
+  }
+
+  function toggleCustomize() {
+    const isThemeOpen = document.getElementById("customizePanel").style.display === "block";
+    switchTopOption(isThemeOpen ? "app" : "theme");
+  }
+
+  // ---------------- PASSCODE & LOGIN / SIGNUP ----------------
   let appPasscode = loadData("app_passcode", "1234");
   let isAppLocked = loadData("app_locked", false);
+  let registeredUsers = loadData("registered_users", {});
   let currentUser = loadData("current_user", "");
 
   function refreshAuthButtons() {
@@ -1174,15 +1234,40 @@
     document.getElementById("loginGate").classList.add("open");
   }
 
-  function submitLogin() {
-    const u = document.getElementById("loginUserInput").value.trim();
+  function closeLoginGate() {
+    document.getElementById("loginGate").classList.remove("open");
+  }
+
+  function submitSignUp() {
+    const u = document.getElementById("loginUserInput").value.trim().toLowerCase();
     const p = document.getElementById("loginPassInput").value;
     if (!u || !p) return showToast("Enter username and password");
+    if (p.length < 4) return showToast("Password min 4 chars");
+    registeredUsers[u] = p;
+    saveData("registered_users", registeredUsers);
     currentUser = u;
     saveData("current_user", currentUser);
-    document.getElementById("loginGate").classList.remove("open");
+    closeLoginGate();
     refreshAuthButtons();
-    showToast("Logged in as " + u);
+    showToast("Account created & signed in: " + u);
+  }
+
+  function submitLogin() {
+    const u = document.getElementById("loginUserInput").value.trim().toLowerCase();
+    const p = document.getElementById("loginPassInput").value;
+    if (!u || !p) return showToast("Enter username and password");
+    if (registeredUsers[u] && registeredUsers[u] !== p) {
+      return showToast("Wrong password for " + u);
+    }
+    if (!registeredUsers[u]) {
+      registeredUsers[u] = p;
+      saveData("registered_users", registeredUsers);
+    }
+    currentUser = u;
+    saveData("current_user", currentUser);
+    closeLoginGate();
+    refreshAuthButtons();
+    showToast("Signed in as " + u);
   }
 
   function logoutUser() {
@@ -1220,41 +1305,40 @@
     showToast("App passcode updated");
   }
 
-  // ---------------- THEME & CODE CUSTOMIZER ----------------
+  // ---------------- THEME STYLE, WALLPAPER & CODE ----------------
   const BASE_PRESETS = {
-    "Ocean Glass": { accent: "#38bdf8", accent2: "#818cf8", bg1: "#0b0f19", text: "#f5f7fa", blur: 14, radius: 20, dim: 25 },
-    "Emerald Focus": { accent: "#34d399", accent2: "#2dd4bf", bg1: "#071412", text: "#ecfdf5", blur: 16, radius: 22, dim: 30 },
-    "Amber Night": { accent: "#fbbf24", accent2: "#f97316", bg1: "#140e07", text: "#fffbeb", blur: 18, radius: 18, dim: 35 },
-    "Minimal Dark": { accent: "#e2e8f0", accent2: "#94a3b8", bg1: "#050507", text: "#f8fafc", blur: 10, radius: 16, dim: 45 }
+    "Pure Glass": { bgBase: "#06070a", cardColor: "#ffffff", textPrimary: "#ffffff", btnActiveBg: "#ffffff", btnActiveText: "#06070a", cardAlpha: 0.08, blur: 24, radius: 26, dim: 45 },
+    "Pure White": { bgBase: "#f8fafc", cardColor: "#0f172a", textPrimary: "#0f172a", btnActiveBg: "#0f172a", btnActiveText: "#ffffff", cardAlpha: 0.06, blur: 20, radius: 24, dim: 15 },
+    "Obsidian": { bgBase: "#000000", cardColor: "#ffffff", textPrimary: "#ffffff", btnActiveBg: "#ffffff", btnActiveText: "#000000", cardAlpha: 0.14, blur: 32, radius: 20, dim: 65 },
+    "Frosted": { bgBase: "#0c0f14", cardColor: "#ffffff", textPrimary: "#ffffff", btnActiveBg: "#ffffff", btnActiveText: "#0c0f14", cardAlpha: 0.18, blur: 28, radius: 28, dim: 35 }
   };
 
   let themePresets = loadData("theme_presets", JSON.parse(JSON.stringify(BASE_PRESETS)));
-  let activePresetName = loadData("active_preset", "Ocean Glass");
-  let activeThemeCfg = loadData("active_theme_cfg", JSON.parse(JSON.stringify(themePresets[activePresetName] || BASE_PRESETS["Ocean Glass"])));
-
-  function toggleCustomize() {
-    const p = document.getElementById("customizePanel");
-    const b = document.getElementById("customizeBtn");
-    const open = p.style.display === "none";
-    p.style.display = open ? "block" : "none";
-    b.classList.toggle("active", open);
-    if (open) p.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
+  let activePresetName = loadData("active_preset", "Pure Glass");
+  let activeThemeCfg = loadData("active_theme_cfg", JSON.parse(JSON.stringify(themePresets[activePresetName] || BASE_PRESETS["Pure Glass"])));
 
   function applyThemeCfg(cfg) {
     const r = document.documentElement.style;
-    r.setProperty("--accent", cfg.accent);
-    r.setProperty("--accent-2", cfg.accent2);
-    r.setProperty("--bg-1", cfg.bg1);
-    r.setProperty("--text", cfg.text);
+    r.setProperty("--bg-base", cfg.bgBase);
+    r.setProperty("--card-color", cfg.cardColor);
+    r.setProperty("--border-color", cfg.cardColor);
+    r.setProperty("--text-primary", cfg.textPrimary);
+    r.setProperty("--btn-text", cfg.textPrimary);
+    r.setProperty("--btn-active-bg", cfg.btnActiveBg);
+    r.setProperty("--btn-active-text", cfg.btnActiveText);
+    r.setProperty("--card-alpha", cfg.cardAlpha);
     r.setProperty("--glass-blur", cfg.blur + "px");
     r.setProperty("--radius", cfg.radius + "px");
     r.setProperty("--bg-dim", (cfg.dim / 100).toFixed(2));
 
-    document.getElementById("cAccent").value = cfg.accent;
-    document.getElementById("cAccent2").value = cfg.accent2;
-    document.getElementById("cBg1").value = cfg.bg1;
-    document.getElementById("cText").value = cfg.text;
+    document.getElementById("cBgBase").value = cfg.bgBase;
+    document.getElementById("cCardColor").value = cfg.cardColor;
+    document.getElementById("cTextPrimary").value = cfg.textPrimary;
+    document.getElementById("cBtnActiveBg").value = cfg.btnActiveBg;
+    document.getElementById("cBtnActiveText").value = cfg.btnActiveText;
+
+    document.getElementById("sAlpha").value = Math.round(cfg.cardAlpha * 100);
+    document.getElementById("vAlpha").textContent = Math.round(cfg.cardAlpha * 100) + "%";
     document.getElementById("sBlur").value = cfg.blur;
     document.getElementById("vBlur").textContent = cfg.blur + "px";
     document.getElementById("sRadius").value = cfg.radius;
@@ -1278,7 +1362,7 @@
         saveData("active_theme_cfg", activeThemeCfg);
         applyThemeCfg(activeThemeCfg);
         renderThemePresets();
-        showToast("Theme: " + name);
+        showToast("Style: " + name);
       };
       grid.appendChild(btn);
     });
@@ -1291,6 +1375,7 @@
   }
 
   function updateThemeSliders() {
+    activeThemeCfg.cardAlpha = Number(document.getElementById("sAlpha").value) / 100;
     activeThemeCfg.blur = Number(document.getElementById("sBlur").value);
     activeThemeCfg.radius = Number(document.getElementById("sRadius").value);
     activeThemeCfg.dim = Number(document.getElementById("sDim").value);
@@ -1303,31 +1388,44 @@
     saveData("theme_presets", themePresets);
     saveData("active_preset", activePresetName);
     renderThemePresets();
-    showToast("Saved to " + activePresetName);
+    showToast("Saved style: " + activePresetName);
   }
 
   function resetThemePreset() {
     themePresets = JSON.parse(JSON.stringify(BASE_PRESETS));
-    activePresetName = "Ocean Glass";
-    activeThemeCfg = JSON.parse(JSON.stringify(BASE_PRESETS["Ocean Glass"]));
+    activePresetName = "Pure Glass";
+    activeThemeCfg = JSON.parse(JSON.stringify(BASE_PRESETS["Pure Glass"]));
     saveData("theme_presets", themePresets);
     saveData("active_preset", activePresetName);
     saveData("active_theme_cfg", activeThemeCfg);
     applyThemeCfg(activeThemeCfg);
     renderThemePresets();
-    showToast("Theme reset");
+    showToast("Style reset");
   }
 
   function setLifeWallpaper(e) {
     const file = e.target.files[0];
+    e.target.value = "";
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      saveData("wallpaper_url", ev.target.result);
-      document.getElementById("wallpaperLayer").style.backgroundImage = `url(${ev.target.result})`;
-      showToast("Wallpaper updated");
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 900;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        const ratio = Math.min(maxDim / w, maxDim / h);
+        w = Math.round(w * ratio);
+        h = Math.round(h * ratio);
+      }
+      const c = document.createElement("canvas");
+      c.width = w;
+      c.height = h;
+      c.getContext("2d").drawImage(img, 0, 0, w, h);
+      const dataUrl = c.toDataURL("image/jpeg", 0.72);
+      saveData("wallpaper_url", dataUrl);
+      document.getElementById("wallpaperLayer").style.backgroundImage = `url(${dataUrl})`;
+      showToast("Wallpaper set");
     };
-    reader.readAsDataURL(file);
+    img.src = URL.createObjectURL(file);
   }
 
   function clearLifeWallpaper() {
@@ -1345,7 +1443,7 @@
     if (js.trim()) {
       try { new Function(js)(); } catch (err) { console.error(err); }
     }
-    showToast("Custom code applied");
+    showToast("Code applied");
   }
 
   function clearLiveCode() {
@@ -1354,10 +1452,10 @@
     document.getElementById("lifeosLiveCss").textContent = "";
     saveData("custom_css", "");
     saveData("custom_js", "");
-    showToast("Custom code cleared");
+    showToast("Code cleared");
   }
 
-  // ---------------- DEFAULT DATA ----------------
+  // ---------------- ORIGINAL LIFE OS DATA & LOGIC ----------------
   const defaultHabits = [
     { id: 1, start: 5.0, end: 6.0, time: "05:00 - 06:00 AM", title: "Wake Up, 60 Push-ups & Stretching", desc: "Wake up at 5:00 AM sharp for 1 hour of bodyweight training and mobility.", tag: "Fitness", essential: true },
     { id: 2, start: 6.0, end: 7.0, time: "06:00 - 07:00 AM", title: "Room Cleanup & Dishes", desc: "Organize living space and clean utensils.", tag: "Cleanliness", essential: true },
@@ -1654,7 +1752,7 @@
           html += `
             <div class="rule-row">
               <div>
-                <div style="font-size:11px; color:var(--accent); font-weight:700;">${String(i+1).padStart(2,"0")} • ${r.category}</div>
+                <div style="font-size:11px; color:var(--text-secondary); font-weight:700;">${String(i+1).padStart(2,"0")} • ${r.category}</div>
                 <div style="font-size:14px; margin-top:2px;">${r.ruleText}</div>
               </div>
               <button type="button" class="del-icon ${isConfirm ? 'confirming' : ''}" onclick="deleteRule(${r.id})">${isConfirm ? 'Sure?' : '×'}</button>
@@ -1877,7 +1975,7 @@
           <div class="ledger-actions">
             ${canSettle
               ? `<button type="button" class="chip-btn" onclick="toggleSettled(${item.id})">${item.settled ? 'Mark Pending' : 'Mark Settled'}</button>`
-              : '<span style="font-size:11.5px; color:var(--muted);">Recorded</span>'
+              : '<span style="font-size:11.5px; color:var(--text-secondary);">Recorded</span>'
             }
             <button type="button" class="del-icon ${isConfirm ? 'confirming' : ''}" onclick="deleteLedger(${item.id})">${isConfirm ? 'Sure?' : '×'}</button>
           </div>
