@@ -75,7 +75,6 @@
     z-index: 1;
   }
 
-  /* Toast notification */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -100,13 +99,37 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Header */
+  /* Auth & Passcode Lock Overlay */
+  .gate-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: rgba(6, 9, 17, 0.96);
+    backdrop-filter: blur(18px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .gate-overlay.open {
+    display: flex;
+  }
+  .gate-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
     gap: 8px;
+    flex-wrap: wrap;
   }
 
   .title-wrap h1 {
@@ -124,7 +147,8 @@
   .header-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    flex-wrap: wrap;
   }
 
   .clock-pill {
@@ -142,7 +166,7 @@
     background: var(--card-bg);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 7px 12px;
+    padding: 7px 11px;
     border-radius: 999px;
     font-size: 12px;
     font-weight: 700;
@@ -156,7 +180,6 @@
     color: var(--accent);
   }
 
-  /* Level Banner */
   .level-card {
     background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(129, 140, 248, 0.18));
     border: 1px solid rgba(129, 140, 248, 0.35);
@@ -211,7 +234,6 @@
     margin-top: 6px;
   }
 
-  /* Segmented Control */
   .segmented {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -241,7 +263,6 @@
     border: 1px solid rgba(255, 255, 255, 0.16);
   }
 
-  /* Views */
   .view {
     display: none;
   }
@@ -249,7 +270,6 @@
     display: block;
   }
 
-  /* Card */
   .card {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -329,7 +349,6 @@
     color: var(--accent);
   }
 
-  /* Forms */
   .form-box {
     display: none;
     margin-top: 14px;
@@ -383,7 +402,6 @@
     margin-bottom: 12px;
   }
 
-  /* Routine Items */
   .routine-list {
     display: flex;
     flex-direction: column;
@@ -513,7 +531,6 @@
     font-size: 11px;
   }
 
-  /* Quiz */
   .quiz-header-card {
     text-align: center;
   }
@@ -667,7 +684,6 @@
     min-width: 110px;
   }
 
-  /* Finance Ledger */
   .summary-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -760,7 +776,6 @@
     font-size: 13px;
   }
 
-  /* Customize Panel */
   .cust-section {
     font-size: 11px;
     font-weight: 700;
@@ -835,6 +850,36 @@
 <div id="wallpaperLayer" class="wallpaper-layer"></div>
 <div class="wallpaper-dim"></div>
 
+<!-- APP PASSCODE LOCK GATE -->
+<div id="passLockGate" class="gate-overlay">
+  <div class="gate-card">
+    <h2 style="font-size:18px; margin-bottom:6px;">App Password Lock</h2>
+    <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Enter app passcode to unlock Life OS (Default: 1234).</p>
+    <div class="field">
+      <label>Passcode</label>
+      <input type="password" id="unlockPassInput" class="input" placeholder="Enter passcode">
+    </div>
+    <button type="button" class="primary-btn" onclick="verifyAppPasscode()">Unlock App</button>
+  </div>
+</div>
+
+<!-- LOGIN GATE -->
+<div id="loginGate" class="gate-overlay">
+  <div class="gate-card">
+    <h2 style="font-size:18px; margin-bottom:6px;">Life OS Login</h2>
+    <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Sign in with your user name and password.</p>
+    <div class="field">
+      <label>User Name / Email</label>
+      <input type="text" id="loginUserInput" class="input" placeholder="e.g. rehan">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="loginPassInput" class="input" placeholder="Enter password">
+    </div>
+    <button type="button" class="primary-btn" onclick="submitLogin()">Login</button>
+  </div>
+</div>
+
 <div class="app">
 
   <div class="header">
@@ -843,16 +888,28 @@
       <p id="dateText">Personal Discipline & Ledger</p>
     </div>
     <div class="header-right">
+      <button type="button" class="custom-toggle-btn" id="loginBtn" onclick="openLoginGate()">Login</button>
+      <button type="button" class="custom-toggle-btn" id="lockBtn" onclick="lockAppNow()">Lock</button>
       <button type="button" class="custom-toggle-btn" id="customizeBtn" onclick="toggleCustomize()">Customize</button>
       <div class="clock-pill" id="liveClock">--:--</div>
     </div>
   </div>
 
-  <!-- Theme & Live Code Customize Card -->
+  <!-- Theme, Password & Live Code Customize Card -->
   <div class="card" id="customizePanel" style="display:none;">
     <div class="progress-top" style="margin-bottom:4px;">
-      <span class="progress-label">Theme & Code Customize</span>
+      <span class="progress-label">Theme, Password & Code Customize</span>
       <button type="button" class="chip-btn" onclick="toggleCustomize()">Close</button>
+    </div>
+
+    <div class="cust-section">App Passcode & Login</div>
+    <div class="field">
+      <label>Change App Passcode</label>
+      <input type="text" id="newPasscodeInput" class="input" placeholder="New passcode (min 3 chars)">
+    </div>
+    <div class="controls-row" style="margin-top:4px; margin-bottom:10px;">
+      <button type="button" class="chip-btn accent-chip" onclick="saveNewPasscode()">Save Passcode</button>
+      <button type="button" class="chip-btn" onclick="logoutUser()">Logout</button>
     </div>
 
     <div class="cust-section">Theme Presets</div>
@@ -1072,7 +1129,6 @@
 <div id="toast" class="toast"></div>
 
 <script>
-  // ---------------- SAFE STORAGE ----------------
   const PREFIX = "lifeos_v1_";
   const memStore = {};
   const todayKey = new Date().toISOString().slice(0, 10);
@@ -1102,6 +1158,68 @@
     toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
   }
 
+  // ---------------- PASSCODE & LOGIN ----------------
+  let appPasscode = loadData("app_passcode", "1234");
+  let isAppLocked = loadData("app_locked", false);
+  let currentUser = loadData("current_user", "");
+
+  function refreshAuthButtons() {
+    const lBtn = document.getElementById("loginBtn");
+    lBtn.textContent = currentUser ? currentUser : "Login";
+  }
+
+  function openLoginGate() {
+    document.getElementById("loginUserInput").value = currentUser || "";
+    document.getElementById("loginPassInput").value = "";
+    document.getElementById("loginGate").classList.add("open");
+  }
+
+  function submitLogin() {
+    const u = document.getElementById("loginUserInput").value.trim();
+    const p = document.getElementById("loginPassInput").value;
+    if (!u || !p) return showToast("Enter username and password");
+    currentUser = u;
+    saveData("current_user", currentUser);
+    document.getElementById("loginGate").classList.remove("open");
+    refreshAuthButtons();
+    showToast("Logged in as " + u);
+  }
+
+  function logoutUser() {
+    currentUser = "";
+    saveData("current_user", "");
+    refreshAuthButtons();
+    showToast("Logged out");
+  }
+
+  function lockAppNow() {
+    isAppLocked = true;
+    saveData("app_locked", true);
+    document.getElementById("unlockPassInput").value = "";
+    document.getElementById("passLockGate").classList.add("open");
+  }
+
+  function verifyAppPasscode() {
+    const entered = document.getElementById("unlockPassInput").value;
+    if (entered === appPasscode) {
+      isAppLocked = false;
+      saveData("app_locked", false);
+      document.getElementById("passLockGate").classList.remove("open");
+      showToast("Unlocked");
+    } else {
+      showToast("Wrong passcode");
+    }
+  }
+
+  function saveNewPasscode() {
+    const np = document.getElementById("newPasscodeInput").value.trim();
+    if (np.length < 3) return showToast("Passcode min 3 chars");
+    appPasscode = np;
+    saveData("app_passcode", appPasscode);
+    document.getElementById("newPasscodeInput").value = "";
+    showToast("App passcode updated");
+  }
+
   // ---------------- THEME & CODE CUSTOMIZER ----------------
   const BASE_PRESETS = {
     "Ocean Glass": { accent: "#38bdf8", accent2: "#818cf8", bg1: "#0b0f19", text: "#f5f7fa", blur: 14, radius: 20, dim: 25 },
@@ -1120,6 +1238,7 @@
     const open = p.style.display === "none";
     p.style.display = open ? "block" : "none";
     b.classList.toggle("active", open);
+    if (open) p.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
   function applyThemeCfg(cfg) {
@@ -1267,7 +1386,6 @@
     { id: 7, category: "Sleep Discipline", ruleText: "Keep your phone away before going to sleep.", question: "Are you keeping your phone away from bed before sleeping tonight?" }
   ];
 
-  // ---------------- STATE ----------------
   let habits = loadData("habits", defaultHabits);
   let rules = loadData("rules", defaultRules);
   let ledger = loadData("ledger", []);
@@ -1283,7 +1401,6 @@
   let ledgerFilter = "all";
   let pendingDeleteKey = null;
 
-  // ---------------- LEVEL SYSTEM ----------------
   function getRankTitle(level) {
     if (level <= 2) return "Novice";
     if (level <= 5) return "Apprentice";
@@ -1336,7 +1453,6 @@
     document.getElementById("totalXpText").textContent = "Total: " + profile.xp + " XP";
   }
 
-  // ---------------- CLOCK & TABS ----------------
   function updateClock() {
     const now = new Date();
     const h = now.getHours();
@@ -1379,7 +1495,6 @@
     return parts[0] + parts[1] / 60;
   }
 
-  // ---------------- ROUTINE ----------------
   function renderRoutine() {
     const list = document.getElementById("routineList");
     list.innerHTML = "";
@@ -1494,7 +1609,6 @@
     renderRoutine();
   }
 
-  // ---------------- RULES & QUIZ ----------------
   function setQuizMode(mode) {
     quizMode = mode;
     qIndex = 0;
@@ -1667,7 +1781,6 @@
     renderQuiz();
   }
 
-  // ---------------- 3-SECOND PAUSE ----------------
   let pauseRunning = false;
   function startPauseTimer() {
     if (pauseRunning) return;
@@ -1695,7 +1808,6 @@
     }, 1000);
   }
 
-  // ---------------- FINANCE LEDGER ----------------
   const typeMeta = {
     given: { label: "Given (Lent)", color: "c-green" },
     taken: { label: "Taken (Borrowed)", color: "c-red" },
@@ -1838,6 +1950,11 @@
   document.getElementById("lifeosLiveCss").textContent = savedCss;
   if (savedJs.trim()) {
     try { new Function(savedJs)(); } catch (err) { console.error(err); }
+  }
+
+  refreshAuthButtons();
+  if (isAppLocked) {
+    document.getElementById("passLockGate").classList.add("open");
   }
 
   renderThemePresets();
