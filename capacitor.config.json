@@ -1,0 +1,8 @@
+{
+  "appId": "com.lifeos.tracker",
+  "appName": "Life OS",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#0b0f19"
+  }
+}
